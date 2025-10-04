@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organic Store - Clean Sidebar</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom animations and effects */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .sidebar {
+        background: #f8f9fa;
+        border-right: 1px solid #e5e7eb;
+        animation: slideIn 0.6s ease-out;
+      }
+
+      .category-item {
+        animation: fadeInUp 0.6s ease-out;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        border: 1px solid #e5e7eb;
+      }
+
+      .category-item:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .category-item:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .category-item:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .category-item:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .category-item:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      .category-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: #d1d5db;
+      }
+
+      .category-image {
+        transition: transform 0.3s ease;
+      }
+
+      .category-item:hover .category-image {
+        transform: scale(1.05);
+      }
+
+      .category-label {
+        color: #374151;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .category-item:hover .category-label {
+        color: #059669;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 120px;
+        }
+
+        .category-item {
+          padding: 0.75rem 0.5rem;
+        }
+
+        .category-label {
+          font-size: 0.75rem;
+        }
+
+        .category-image {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .sidebar {
+          width: 100px;
+        }
+
+        .category-item {
+          padding: 0.5rem 0.25rem;
+        }
+
+        .category-label {
+          font-size: 0.7rem;
+          line-height: 1.2;
+        }
+
+        .category-image {
+          width: 45px;
+          height: 45px;
+        }
+      }
+
+      /* Placeholder images with gradients */
+      .avocado-bg {
+        background: linear-gradient(135deg, #84cc16, #65a30d);
+      }
+      .potato-bg {
+        background: linear-gradient(135deg, #eab308, #ca8a04);
+      }
+      .tomato-bg {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+      .milk-bg {
+        background: linear-gradient(135deg, #f3f4f6, #d1d5db);
+      }
+      .egg-bg {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <div class="sidebar w-40 flex-shrink-0 py-4 px-2">
+        <!-- ALL Category -->
+        <div
+          class="category-item rounded-lg p-4 mb-3 text-center cursor-pointer"
+        >
+          <div
+            class="category-image avocado-bg w-16 h-16 rounded-lg mx-auto mb-3 flex items-center justify-center"
+          >
+            <span class="text-white text-2xl">🥑</span>
+          </div>
+          <div class="category-label text-sm font-medium">ALL</div>
+        </div>
+
+        <!-- Organic Vegetables -->
+        <div
+          class="category-item rounded-lg p-4 mb-3 text-center cursor-pointer"
+        >
+          <div
+            class="category-image potato-bg w-16 h-16 rounded-lg mx-auto mb-3 flex items-center justify-center"
+          >
+            <span class="text-white text-2xl">🥔</span>
+          </div>
+          <div class="category-label text-sm font-medium">
+            Organic<br />Vegetables
+          </div>
+        </div>
+
+        <!-- Organic Fruits -->
+        <div
+          class="category-item rounded-lg p-4 mb-3 text-center cursor-pointer"
+        >
+          <div
+            class="category-image tomato-bg w-16 h-16 rounded-lg mx-auto mb-3 flex items-center justify-center"
+          >
+            <span class="text-white text-2xl">🍅</span>
+          </div>
+          <div class="category-label text-sm font-medium">
+            Organic<br />Fruits
+          </div>
+        </div>
+
+        <!-- Organic Milk -->
+        <div
+          class="category-item rounded-lg p-4 mb-3 text-center cursor-pointer"
+        >
+          <div
+            class="category-image milk-bg w-16 h-16 rounded-lg mx-auto mb-3 flex items-center justify-center border"
+          >
+            <span class="text-gray-600 text-2xl">🥛</span>
+          </div>
+          <div class="category-label text-sm font-medium">
+            Organic<br />Milk
+          </div>
+        </div>
+
+        <!-- Organic Eggs -->
+        <div
+          class="category-item rounded-lg p-4 mb-3 text-center cursor-pointer"
+        >
+          <div
+            class="category-image egg-bg w-16 h-16 rounded-lg mx-auto mb-3 flex items-center justify-center"
+          >
+            <span class="text-white text-2xl">🥚</span>
+          </div>
+          <div class="category-label text-sm font-medium">
+            Organic<br />Eggs
+          </div>
+        </div>
+      </div>
+
+
+      
+
+    <script>
+      // Add click handlers for category items
+      document.querySelectorAll(".category-item").forEach((item, index) => {
+        item.addEventListener("click", function () {
+          // Remove active class from all items
+          document.querySelectorAll(".category-item").forEach((i) => {
+            i.classList.remove("ring-2", "ring-green-500", "ring-offset-2");
+          });
+
+          // Add active class to clicked item
+          this.classList.add("ring-2", "ring-green-500", "ring-offset-2");
+
+          // You can add filtering logic here
+          console.log(
+            "Category selected:",
+            this.querySelector(".category-label").textContent.trim()
+          );
+        });
+      });
+
+      // Set first item as active by default
+      document
+        .querySelector(".category-item")
+        .classList.add("ring-2", "ring-green-500", "ring-offset-2");
+    </script>
+  </body>
+</html>

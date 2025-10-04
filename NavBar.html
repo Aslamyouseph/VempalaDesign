@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navigation Bar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --text-primary: #2d3748;
+        --text-secondary: #4a5568;
+        --bg-glass: rgba(252, 252, 252, 0.181);
+      }
+
+      * {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .navbar-glass {
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        transition: transform 0.3s ease;
+      }
+
+      .gradient-text {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .nav-item {
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-item::before {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: var(--accent-gradient);
+        border-radius: 2px;
+        transform: translateX(-50%);
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-item:hover::before {
+        width: 100%;
+      }
+
+      .nav-item:hover {
+        transform: translateY(-2px);
+        color: #4facfe;
+      }
+
+      .dropdown-menu {
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .dropdown:hover .dropdown-menu,
+      .dropdown.open .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .dropdown-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(79, 172, 254, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .dropdown-item:hover::before {
+        left: 100%;
+      }
+
+      .dropdown-item:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(79, 172, 254, 0.1),
+          rgba(0, 242, 254, 0.1)
+        );
+        color: #4facfe;
+        transform: translateX(5px);
+      }
+
+      .filter-sort-icons {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-left: auto;
+      }
+
+      .icon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .icon-button:hover {
+        transform: translateY(-2px) scale(1.05);
+        background: rgba(79, 172, 254, 0.1);
+        border-color: rgba(79, 172, 254, 0.3);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.2);
+      }
+
+      .icon-button:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      .icon-button i {
+        font-size: 18px;
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+      }
+
+      .icon-button:hover i {
+        color: #4facfe;
+      }
+
+      .icon-button.active {
+        background: var(--accent-gradient);
+        border-color: #4facfe;
+      }
+
+      .icon-button.active i {
+        color: white;
+      }
+
+      .icon-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 18px;
+        height: 18px;
+        background: var(--secondary-gradient);
+        border: 2px solid white;
+        border-radius: 50%;
+        font-size: 10px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.3s ease;
+      }
+
+      .icon-badge.show {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .navbar-scroll-hidden {
+        transform: translateY(-100%);
+      }
+
+      .mobile-nav-container {
+        display: none;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        transition: transform 0.3s ease;
+      }
+
+      .mobile-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      @media (max-width: 900px) {
+        .desktop-menu {
+          display: none;
+        }
+
+        .mobile-nav-container {
+          display: block;
+        }
+
+        .navbar-glass {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .navbar-glass {
+          padding: 1rem;
+        }
+
+        .icon-button {
+          width: 40px;
+          height: 40px;
+        }
+
+        .icon-button i {
+          font-size: 16px;
+        }
+      }
+
+      /* Modal Styles */
+      .modal-enter {
+        animation: modalSlideIn 0.3s ease-out;
+      }
+
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .price-slider::-webkit-slider-thumb {
+        appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #4facfe;
+        cursor: pointer;
+      }
+
+      .price-slider::-webkit-slider-track {
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Mobile Navbar -->
+    <div class="mobile-nav-container">
+      <div class="mobile-nav">
+        <div class="filter-sort-icons">
+          <button class="icon-button filter-btn" title="Filter Products">
+            <i class="fas fa-filter"></i>
+            <span class="icon-badge filter-badge">3</span>
+          </button>
+          <button class="icon-button sort-btn" title="Sort Products">
+            <i class="fas fa-sort-amount-down"></i>
+            <span class="icon-badge sort-badge">1</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Navbar -->
+    <nav class="navbar-glass">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <div class="desktop-menu flex items-center gap-1">
+            <!-- Frozen Fish Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center gap-1 px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-snowflake text-sm"></i>
+                <span>Frozen Fish</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 overflow-hidden"
+              >
+                <div class="p-2">
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Frozen King Fish</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-shrimp text-pink-500"></i>
+                    <span>Frozen Shrimp</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-yellow-500"></i>
+                    <span>Frozen Mahi Mahi</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-orange-500"></i>
+                    <span>Frozen Yellowfin Fish</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-shrimp text-red-500"></i>
+                    <span>Frozen Black Tiger Prawns</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ready To Cook Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center gap-1 px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-utensils text-sm"></i>
+                <span>Ready To Cook</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 overflow-hidden"
+              >
+                <div class="p-2">
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-seedling text-green-500"></i>
+                    <span>Vegetable Samosa</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-leaf text-green-600"></i>
+                    <span>Vegetable Spring Roll</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Fish Finger</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-drumstick-bite text-red-500"></i>
+                    <span>Meat Cutlet</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-shrimp text-pink-500"></i>
+                    <span>Butterfly Prawns</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pickle Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center gap-1 px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-pepper-hot text-sm"></i>
+                <span>Pickle</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 overflow-hidden"
+              >
+                <div class="p-2">
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Tuna Pickle</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-shrimp text-pink-500"></i>
+                    <span>Prawns Pickle</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-drumstick-bite text-red-500"></i>
+                    <span>Meat Pickle</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-calendar-alt text-amber-500"></i>
+                    <span>Date Pickle</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Poultry & Meat Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center gap-1 px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-drumstick-bite text-sm"></i>
+                <span>Poultry & Meat</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 overflow-hidden"
+              >
+                <div class="p-2">
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-cow text-amber-600"></i>
+                    <span>Frozen Buffalo</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-sheep text-gray-600"></i>
+                    <span>Frozen Mutton / Goat</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fresh Products Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center gap-1 px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-leaf text-sm"></i>
+                <span>Fresh Products</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 overflow-hidden"
+              >
+                <div class="p-2">
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-gray-700"></i>
+                    <span>Fresh Sword Fish</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Fresh King Fish</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-blue-600"></i>
+                    <span>Fresh Indian Mackerel</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-green-500"></i>
+                    <span>Fresh Anchovy Large</span>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <i class="fas fa-fish text-red-500"></i>
+                    <span>Fresh Red Snapper</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter and Sort Icons -->
+          <div class="filter-sort-icons">
+            <button class="icon-button filter-btn" title="Filter Products">
+              <i class="fas fa-filter"></i>
+              <span class="icon-badge filter-badge">3</span>
+            </button>
+            <button class="icon-button sort-btn" title="Sort Products">
+              <i class="fas fa-sort-amount-down"></i>
+              <span class="icon-badge sort-badge">1</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Filter & Sort Modal -->
+    <div
+      id="filterSortModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300"
+    >
+      <div
+        class="bg-white rounded-lg shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col modal-enter sm:max-w-md md:max-w-lg lg:max-w-xl"
+      >
+        <div
+          class="p-4 border-b border-gray-200 flex justify-between items-center"
+        >
+          <h2 class="text-xl font-semibold text-gray-800">Filter & Sort</h2>
+          <button
+            id="closeModal"
+            class="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors"
+          >
+            <i class="fas fa-times text-lg"></i>
+          </button>
+        </div>
+        <div class="flex border-b border-gray-200">
+          <button
+            id="filterTab"
+            class="flex-1 py-3 px-4 border-b-2 border-blue-600 text-blue-600 font-medium bg-blue-50 transition-colors"
+          >
+            Filter
+          </button>
+          <button
+            id="sortTab"
+            class="flex-1 py-3 px-4 border-b-2 border-transparent text-gray-600 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+          >
+            Sort
+          </button>
+        </div>
+        <div id="filterContent" class="p-4 overflow-y-auto flex-1">
+          <!-- Price Range -->
+          <div class="mb-6">
+            <h3 class="font-medium text-gray-800 mb-3">Price Range</h3>
+            <div class="flex gap-2 mb-3">
+              <input
+                type="number"
+                id="minPrice"
+                placeholder="Min ($)"
+                class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                min="0"
+                max="1000"
+              />
+              <input
+                type="number"
+                id="maxPrice"
+                placeholder="Max ($)"
+                class="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                min="0"
+                max="1000"
+              />
+            </div>
+            <input
+              type="range"
+              id="priceSlider"
+              min="0"
+              max="1000"
+              value="500"
+              class="price-slider w-full"
+            />
+            <div class="text-sm text-gray-500 mt-1">
+              Selected: $<span id="sliderValue">0 - 500</span>
+            </div>
+          </div>
+          <!-- Category -->
+          <div class="mb-6">
+            <h3 class="font-medium text-gray-800 mb-3">Category</h3>
+            <div class="space-y-2 max-h-32 overflow-y-auto">
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Frozen Fish</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Ready To Cook</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Pickle</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Poultry & Meat</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Fresh Products</span>
+              </label>
+            </div>
+          </div>
+          <!-- Brand -->
+          <div class="mb-6">
+            <h3 class="font-medium text-gray-800 mb-3">Brand</h3>
+            <div class="space-y-2 max-h-32 overflow-y-auto">
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">SeaKing</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">OceanDelight</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">FreshCatch</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">BlueWave</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">AquaFresh</span>
+              </label>
+            </div>
+          </div>
+          <!-- Rating -->
+          <div class="mb-6">
+            <h3 class="font-medium text-gray-800 mb-3">Rating</h3>
+            <div class="space-y-2">
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <div class="flex text-yellow-400 mr-2">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i
+                  ><i class="fas fa-star"></i><i class="fas fa-star"></i
+                  ><i class="fas fa-star"></i>
+                </div>
+                <span class="text-sm text-gray-700">5 Stars & Up</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <div class="flex text-yellow-400 mr-2">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i
+                  ><i class="fas fa-star"></i><i class="fas fa-star"></i
+                  ><i class="far fa-star"></i>
+                </div>
+                <span class="text-sm text-gray-700">4 Stars & Up</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <div class="flex text-yellow-400 mr-2">
+                  <i class="fas fa-star"></i><i class="fas fa-star"></i
+                  ><i class="fas fa-star"></i><i class="far fa-star"></i
+                  ><i class="far fa-star"></i>
+                </div>
+                <span class="text-sm text-gray-700">3 Stars & Up</span>
+              </label>
+            </div>
+          </div>
+          <!-- Discounts -->
+          <div class="mb-6">
+            <h3 class="font-medium text-gray-800 mb-3">Discounts</h3>
+            <div class="space-y-2">
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">10% Off or more</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">20% Off or more</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">30% Off or more</span>
+              </label>
+            </div>
+          </div>
+          <!-- Locations -->
+          <div class="mb-6">
+            <h3 class="font-medium text-gray-800 mb-3">Locations</h3>
+            <div class="space-y-2 max-h-32 overflow-y-auto">
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Dubai</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Abu Dhabi</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Sharjah</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Ajman</span>
+              </label>
+              <label
+                class="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-50"
+              >
+                <input
+                  type="checkbox"
+                  class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+                />
+                <span class="text-sm text-gray-700">Ras Al Khaimah</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div id="sortContent" class="p-4 overflow-y-auto flex-1 hidden">
+          <div class="space-y-3">
+            <label
+              class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-50 border border-gray-200"
+            >
+              <input
+                type="radio"
+                name="sortOption"
+                value="price-low-high"
+                class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+              />
+              <span class="text-sm text-gray-700 font-medium"
+                >Price: Low to High</span
+              >
+            </label>
+            <label
+              class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-50 border border-gray-200"
+            >
+              <input
+                type="radio"
+                name="sortOption"
+                value="price-high-low"
+                class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+              />
+              <span class="text-sm text-gray-700 font-medium"
+                >Price: High to Low</span
+              >
+            </label>
+            <label
+              class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-50 border border-gray-200"
+            >
+              <input
+                type="radio"
+                name="sortOption"
+                value="new-arrivals"
+                class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+              />
+              <span class="text-sm text-gray-700 font-medium"
+                >New Arrivals</span
+              >
+            </label>
+            <label
+              class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-50 border border-gray-200"
+            >
+              <input
+                type="radio"
+                name="sortOption"
+                value="most-popular"
+                class="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 rounded"
+              />
+              <span class="text-sm text-gray-700 font-medium"
+                >Most Popular</span
+              >
+            </label>
+          </div>
+        </div>
+        <div
+          class="p-4 border-t border-gray-200 flex justify-end gap-3 bg-gray-50"
+        >
+          <button
+            id="clearBtn"
+            class="px-6 py-2 text-gray-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            Clear All
+          </button>
+          <button
+            id="applyBtn"
+            class="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Navbar scroll handling
+      function handleNavbarScroll() {
+        let lastScrollTop = 0;
+        const navbar = document.querySelector(".navbar-glass");
+        const mobileNav = document.querySelector(".mobile-nav-container");
+
+        window.addEventListener("scroll", () => {
+          const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+
+          if (scrollTop > lastScrollTop && scrollTop > 100) {
+            navbar?.style.setProperty("transform", "translateY(-100%)");
+            mobileNav?.style.setProperty("transform", "translateY(-100%)");
+          } else {
+            navbar?.style.setProperty("transform", "translateY(0)");
+            mobileNav?.style.setProperty("transform", "translateY(0)");
+          }
+
+          if (scrollTop > 50) {
+            navbar?.classList.add("shadow-lg");
+            mobileNav?.classList.add("shadow-lg");
+          } else {
+            navbar?.classList.remove("shadow-lg");
+            mobileNav?.classList.remove("shadow-lg");
+          }
+
+          lastScrollTop = scrollTop;
+        });
+      }
+
+      // Dropdown handling
+      function handleDropdowns() {
+        const dropdownButtons = document.querySelectorAll(".dropdown-btn");
+        const dropdowns = document.querySelectorAll(".dropdown");
+
+        const isAbove900px = () => window.innerWidth > 900;
+
+        const closeOtherDropdowns = (currentDropdown) => {
+          dropdowns.forEach((dropdown) => {
+            if (
+              dropdown !== currentDropdown &&
+              dropdown.classList.contains("open")
+            ) {
+              dropdown.classList.remove("open");
+            }
+          });
+        };
+
+        dropdownButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            if (!isAbove900px()) return;
+            e.stopPropagation();
+            const dropdown = button.closest(".dropdown");
+            closeOtherDropdowns(dropdown);
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!isAbove900px() || e.target.closest(".dropdown")) return;
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+
+        window.addEventListener("resize", () => {
+          if (!isAbove900px()) {
+            dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+          }
+        });
+      }
+
+      // Filter and sort button handling
+      function handleFilterSortButtons() {
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const sortButtons = document.querySelectorAll(".sort-btn");
+        const filterBadges = document.querySelectorAll(".filter-badge");
+
+        filterButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            btn.classList.add("active");
+            const badge = btn.querySelector(".filter-badge");
+            badge.classList.add("show");
+          });
+        });
+
+        sortButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            btn.classList.add("active");
+            const sortIcon = btn.querySelector("i");
+            const badge = btn.querySelector(".sort-badge");
+            badge.classList.add("show");
+            if (sortIcon.classList.contains("fa-sort-amount-down")) {
+              sortIcon.classList.replace(
+                "fa-sort-amount-down",
+                "fa-sort-amount-up"
+              );
+            } else if (sortIcon.classList.contains("fa-sort-amount-up")) {
+              sortIcon.classList.replace(
+                "fa-sort-amount-up",
+                "fa-sort-amount-down"
+              );
+            }
+          });
+        });
+
+        setTimeout(
+          () => filterBadges.forEach((badge) => badge.classList.add("show")),
+          1000
+        );
+      }
+
+      // Modal handling
+      function handleModal() {
+        const modal = document.getElementById("filterSortModal");
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const sortButtons = document.querySelectorAll(".sort-btn");
+        const closeBtn = document.getElementById("closeModal");
+        const filterTab = document.getElementById("filterTab");
+        const sortTab = document.getElementById("sortTab");
+        const filterContent = document.getElementById("filterContent");
+        const sortContent = document.getElementById("sortContent");
+        const applyBtn = document.getElementById("applyBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const priceSlider = document.getElementById("priceSlider");
+        const sliderValue = document.getElementById("sliderValue");
+        const minPriceInput = document.getElementById("minPrice");
+        const maxPriceInput = document.getElementById("maxPrice");
+        const filterBadges = document.querySelectorAll(".filter-badge");
+        const sortBadges = document.querySelectorAll(".sort-badge");
+
+        function updateSliderDisplay() {
+          let minVal = parseInt(minPriceInput.value) || 0;
+          let maxVal =
+            parseInt(maxPriceInput.value) || parseInt(priceSlider.value) || 500;
+
+          if (minVal > maxVal) {
+            maxVal = minVal;
+            maxPriceInput.value = maxVal;
+            priceSlider.value = maxVal;
+          }
+
+          if (maxVal > 1000) {
+            maxVal = 1000;
+            maxPriceInput.value = maxVal;
+            priceSlider.value = maxVal;
+          }
+
+          if (minVal < 0) {
+            minVal = 0;
+            minPriceInput.value = minVal;
+          }
+
+          sliderValue.textContent = `${minVal} - ${maxVal}`;
+        }
+
+        // Price slider and inputs sync
+        priceSlider.addEventListener("input", (e) => {
+          maxPriceInput.value = e.target.value;
+          updateSliderDisplay();
+        });
+
+        minPriceInput.addEventListener("input", updateSliderDisplay);
+
+        maxPriceInput.addEventListener("input", (e) => {
+          const val = parseInt(e.target.value);
+          if (val >= 0 && val <= 1000) {
+            priceSlider.value = val;
+          } else if (val > 1000) {
+            e.target.value = 1000;
+            priceSlider.value = 1000;
+          } else {
+            e.target.value = priceSlider.value;
+          }
+          updateSliderDisplay();
+        });
+
+        // Initialize values
+        minPriceInput.value = 0;
+        maxPriceInput.value = 500;
+        priceSlider.value = 500;
+        updateSliderDisplay();
+
+        // Open modal for filter
+        filterButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            showFilter();
+            modal.classList.remove("opacity-0", "pointer-events-none");
+            modal.classList.add("opacity-100");
+          });
+        });
+
+        // Open modal for sort
+        sortButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            showSort();
+            modal.classList.remove("opacity-0", "pointer-events-none");
+            modal.classList.add("opacity-100");
+          });
+        });
+
+        // Tab switching
+        function showFilter() {
+          filterContent.classList.remove("hidden");
+          sortContent.classList.add("hidden");
+          filterTab.classList.add(
+            "border-blue-600",
+            "text-blue-600",
+            "bg-blue-50"
+          );
+          filterTab.classList.remove(
+            "border-transparent",
+            "text-gray-600",
+            "bg-transparent"
+          );
+          sortTab.classList.add(
+            "border-transparent",
+            "text-gray-600",
+            "bg-transparent"
+          );
+          sortTab.classList.remove(
+            "border-blue-600",
+            "text-blue-600",
+            "bg-blue-50"
+          );
+        }
+
+        function showSort() {
+          sortContent.classList.remove("hidden");
+          filterContent.classList.add("hidden");
+          sortTab.classList.add(
+            "border-blue-600",
+            "text-blue-600",
+            "bg-blue-50"
+          );
+          sortTab.classList.remove(
+            "border-transparent",
+            "text-gray-600",
+            "bg-transparent"
+          );
+          filterTab.classList.add(
+            "border-transparent",
+            "text-gray-600",
+            "bg-transparent"
+          );
+          filterTab.classList.remove(
+            "border-blue-600",
+            "text-blue-600",
+            "bg-blue-50"
+          );
+        }
+
+        filterTab.addEventListener("click", showFilter);
+        sortTab.addEventListener("click", showSort);
+
+        // Close modal
+        closeBtn.addEventListener("click", closeModal);
+        function closeModal() {
+          modal.classList.add("opacity-0", "pointer-events-none");
+          modal.classList.remove("opacity-100");
+        }
+
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeModal();
+        });
+
+        // Apply button
+        applyBtn.addEventListener("click", () => {
+          // Update filter badge
+          const checkedFilters = filterContent.querySelectorAll(
+            'input[type="checkbox"]:checked'
+          ).length;
+          const hasPriceRange = minPriceInput.value || maxPriceInput.value;
+          const totalFilters = checkedFilters + (hasPriceRange ? 1 : 0);
+          filterBadges.forEach((badge) => {
+            badge.textContent = totalFilters || 0;
+            if (totalFilters > 0) badge.classList.add("show");
+            else badge.classList.remove("show");
+          });
+
+          // Update sort badge
+          const selectedSort = sortContent.querySelector(
+            'input[type="radio"]:checked'
+          );
+          sortBadges.forEach((badge) => {
+            badge.textContent = selectedSort ? 1 : 0;
+            if (selectedSort) badge.classList.add("show");
+            else badge.classList.remove("show");
+          });
+
+          closeModal();
+        });
+
+        // Clear button
+        clearBtn.addEventListener("click", () => {
+          filterContent
+            .querySelectorAll('input[type="checkbox"]')
+            .forEach((cb) => (cb.checked = false));
+          sortContent
+            .querySelectorAll('input[type="radio"]')
+            .forEach((r) => (r.checked = false));
+          minPriceInput.value = "";
+          maxPriceInput.value = "";
+          priceSlider.value = 500;
+          sliderValue.textContent = "0 - 500";
+          filterBadges.forEach((badge) => {
+            badge.textContent = "0";
+            badge.classList.remove("show");
+          });
+          sortBadges.forEach((badge) => {
+            badge.textContent = "0";
+            badge.classList.remove("show");
+          });
+        });
+      }
+
+      // Mobile menu button handling
+      function handleMobileMenu() {
+        // Placeholder for mobile menu if needed
+      }
+
+      // Initialize all functionality
+      document.addEventListener("DOMContentLoaded", () => {
+        handleNavbarScroll();
+        handleDropdowns();
+        handleFilterSortButtons();
+        handleModal();
+        handleMobileMenu();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopEase - Sign Up / Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-image: url("https://images.unsplash.com/photo-1556740714-7c9a7a7c7a7c");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+      input:focus,
+      textarea:focus {
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+      }
+      .animate-slide-in {
+        animation: slideIn 0.5s ease-out;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .btn-gradient {
+        background: linear-gradient(45deg, #4f46e5, #7c3aed);
+      }
+      .btn-gradient:hover {
+        background: linear-gradient(45deg, #4338ca, #6d28d9);
+      }
+
+      .main-container {
+        min-height: 500px;
+        position: relative;
+      }
+
+      @media (min-width: 1024px) {
+        .main-container {
+          min-height: 600px;
+        }
+      }
+
+      .form-container {
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .image-container {
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 180px;
+      }
+
+      @media (min-width: 1024px) {
+        .image-container {
+          min-height: 100%;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 50%;
+        }
+
+        .image-left {
+          left: 0;
+        }
+
+        .image-right {
+          right: 0;
+        }
+
+        .form-container {
+          width: 50%;
+          position: relative;
+        }
+
+        .form-left {
+          margin-left: 0;
+          margin-right: auto;
+        }
+
+        .form-right {
+          margin-left: auto;
+          margin-right: 0;
+        }
+      }
+
+      .form-hidden {
+        display: none;
+      }
+      .fade-enter {
+        animation: fadeIn 0.5s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex items-center justify-center p-3 sm:p-4">
+    <div
+      id="mainContainer"
+      class="w-full max-w-4xl bg-white rounded-xl shadow-2xl flex flex-col lg:flex-row overflow-hidden animate-slide-in main-container"
+    >
+      <!-- Form Section -->
+      <div
+        id="formSection"
+        class="w-full lg:w-1/2 p-4 sm:p-6 form-container form-left flex items-center justify-center"
+      >
+        <div class="w-full max-w-md">
+          <!-- Signup Form -->
+          <div id="signupForm" class="">
+            <div class="flex justify-center mb-3">
+              <h1
+                class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2"
+              >
+                🛒 <span>ShopEase</span>
+              </h1>
+            </div>
+            <h2
+              class="text-base sm:text-lg font-semibold text-gray-700 mb-3 text-center"
+            >
+              Create Account
+            </h2>
+            <form class="space-y-2.5" onsubmit="return false;">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Phone Number</label
+                >
+                <input
+                  type="tel"
+                  placeholder="+91 9876543210"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Address</label
+                >
+                <textarea
+                  placeholder="Enter your full address..."
+                  rows="2"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200 resize-none"
+                ></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  placeholder="********"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Confirm Password</label
+                >
+                <input
+                  type="password"
+                  placeholder="********"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full btn-gradient text-white py-2 rounded-lg font-semibold transition duration-300 text-xs shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+              >
+                Create Account
+              </button>
+            </form>
+            <div class="flex items-center my-2.5">
+              <div class="flex-grow border-t border-gray-300"></div>
+              <span class="mx-3 text-gray-500 text-xs font-medium">OR</span>
+              <div class="flex-grow border-t border-gray-300"></div>
+            </div>
+            <p class="text-center text-xs text-gray-600">
+              Already have an account?
+              <a
+                href="#"
+                class="text-indigo-600 font-semibold hover:underline hover:text-indigo-700 transition"
+                onclick="toggleForm(); return false;"
+                >Login</a
+              >
+            </p>
+          </div>
+
+          <!-- Login Form -->
+          <div id="loginForm" class="form-hidden">
+            <div class="flex justify-center mb-3">
+              <h1
+                class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2"
+              >
+                🛒 <span>ShopEase</span>
+              </h1>
+            </div>
+            <h2
+              class="text-base sm:text-lg font-semibold text-gray-700 mb-3 text-center"
+            >
+              Welcome Back
+            </h2>
+            <form class="space-y-3" onsubmit="return false;">
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Email or Phone</label
+                >
+                <input
+                  type="text"
+                  placeholder="you@example.com or +91 9876543210"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-700 mb-0.5"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  placeholder="********"
+                  required
+                  class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition duration-200"
+                />
+              </div>
+              <p
+                class="text-right text-xs text-indigo-600 hover:underline hover:text-indigo-700 cursor-pointer font-medium transition"
+              >
+                Forgot password?
+              </p>
+              <button
+                type="submit"
+                class="w-full btn-gradient text-white py-2 rounded-lg font-semibold transition duration-300 text-xs shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+              >
+                Sign In
+              </button>
+            </form>
+            <div class="flex items-center my-2.5">
+              <div class="flex-grow border-t border-gray-300"></div>
+              <span class="mx-3 text-gray-500 text-xs font-medium">OR</span>
+              <div class="flex-grow border-t border-gray-300"></div>
+            </div>
+            <p class="text-center text-xs text-gray-600">
+              Don't have an account?
+              <a
+                href="#"
+                class="text-indigo-600 font-semibold hover:underline hover:text-indigo-700 transition"
+                onclick="toggleForm(); return false;"
+                >Sign Up</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Section -->
+      <div
+        id="imageSection"
+        class="w-full lg:w-1/2 bg-cover bg-center relative image-container image-right"
+        style="
+          background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');
+        "
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex flex-col justify-center items-center text-white p-6"
+        >
+          <h2
+            class="text-xl sm:text-2xl font-bold mb-2 text-center"
+            id="imageText"
+          >
+            Join ShopEase!
+          </h2>
+          <p class="text-xs sm:text-sm text-center max-w-xs" id="imageSubText">
+            Exclusive deals & fast delivery await.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleForm() {
+        const signupForm = document.getElementById("signupForm");
+        const loginForm = document.getElementById("loginForm");
+        const imageSection = document.getElementById("imageSection");
+        const formSection = document.getElementById("formSection");
+        const mainContainer = document.getElementById("mainContainer");
+        const imageText = document.getElementById("imageText");
+        const imageSubText = document.getElementById("imageSubText");
+
+        // Check if we're on desktop (lg breakpoint)
+        const isDesktop = window.innerWidth >= 1024;
+
+        if (signupForm.classList.contains("form-hidden")) {
+          // Switch back to Signup
+          signupForm.classList.remove("form-hidden");
+          signupForm.classList.add("fade-enter");
+          loginForm.classList.add("form-hidden");
+
+          if (isDesktop) {
+            // Desktop: Form left, Image right
+            formSection.classList.remove("form-right");
+            formSection.classList.add("form-left");
+            imageSection.classList.remove("image-left");
+            imageSection.classList.add("image-right");
+          } else {
+            // Mobile: Form first, Image second
+            if (formSection.nextElementSibling !== imageSection) {
+              mainContainer.appendChild(imageSection);
+            }
+          }
+
+          imageText.textContent = "Join ShopEase!";
+          imageSubText.textContent = "Exclusive deals & fast delivery await.";
+        } else {
+          // Switch to Login
+          signupForm.classList.add("form-hidden");
+          loginForm.classList.remove("form-hidden");
+          loginForm.classList.add("fade-enter");
+
+          if (isDesktop) {
+            // Desktop: Image left, Form right
+            formSection.classList.remove("form-left");
+            formSection.classList.add("form-right");
+            imageSection.classList.remove("image-right");
+            imageSection.classList.add("image-left");
+          } else {
+            // Mobile: Image first, Form second
+            if (imageSection.nextElementSibling !== formSection) {
+              mainContainer.insertBefore(imageSection, formSection);
+            }
+          }
+
+          imageText.textContent = "Welcome Back!";
+          imageSubText.textContent = "Log in to continue shopping.";
+        }
+      }
+
+      function getElementHeight(el, isHidden) {
+        if (!isHidden) return el.offsetHeight;
+        const originalDisplay = el.style.display;
+        const originalVisibility = el.style.visibility;
+        el.style.display = "block";
+        el.style.visibility = "hidden";
+        const height = el.offsetHeight;
+        el.style.display = originalDisplay;
+        el.style.visibility = originalVisibility;
+        return height;
+      }
+
+      window.addEventListener("load", () => {
+        const signupForm = document.getElementById("signupForm");
+        const loginForm = document.getElementById("loginForm");
+        const signupHeight = getElementHeight(signupForm, false);
+        const loginHeight = getElementHeight(loginForm, true);
+        const maxHeight = Math.max(signupHeight, loginHeight);
+        signupForm.style.minHeight = `${maxHeight}px`;
+        loginForm.style.minHeight = `${maxHeight}px`;
+      });
+    </script>
+  </body>
+</html>

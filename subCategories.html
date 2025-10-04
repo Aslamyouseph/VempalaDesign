@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Cards with Sidebar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f3f4f6;
+        padding: 20px;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .product-card {
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .quantity-container {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .quantity-plus {
+        background: #22c55e;
+        color: white;
+      }
+
+      .quantity-plus:hover {
+        background: #16a34a;
+      }
+
+      .quantity-plus.initial {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .quantity-plus.moved {
+        position: static;
+        transform: translateX(0);
+      }
+
+      .quantity-minus {
+        background: #ef4444;
+        color: white;
+        opacity: 0;
+        transform: translateX(20px) scale(0.5);
+        visibility: hidden;
+      }
+
+      .quantity-minus.visible {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        visibility: visible;
+      }
+
+      .quantity-count {
+        opacity: 0;
+        transform: translateY(10px);
+        min-width: 2rem;
+        text-align: center;
+        background: #e5e7eb;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .quantity-count.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .quantity-count.changing {
+        transform: scale(1.2);
+        background: #d1d5db;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .moving-indicator {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        border: 2px solid #22c55e;
+        animation: pulse 1.5s infinite;
+        z-index: 10;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .slider-indicators {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 4px;
+        z-index: 10;
+      }
+
+      .indicator {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      .indicator.active {
+        background: white;
+        width: 8px;
+        height: 8px;
+      }
+
+      /* Sidebar styles */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .sidebar {
+        background: #f8f9fa;
+        border-right: 1px solid #e5e7eb;
+        animation: slideIn 0.6s ease-out;
+        display: none;
+      }
+
+      .category-item {
+        animation: fadeInUp 0.6s ease-out;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        border: 1px solid #e5e7eb;
+      }
+
+      .category-item:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .category-item:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .category-item:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .category-item:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .category-item:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      .category-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-color: #d1d5db;
+      }
+
+      .category-image {
+        transition: transform 0.3s ease;
+      }
+
+      .category-item:hover .category-image {
+        transform: scale(1.05);
+      }
+
+      .category-label {
+        color: #374151;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .category-item:hover .category-label {
+        color: #059669;
+      }
+
+      .avocado-bg {
+        background: linear-gradient(135deg, #84cc16, #65a30d);
+      }
+      .potato-bg {
+        background: linear-gradient(135deg, #eab308, #ca8a04);
+      }
+      .tomato-bg {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+      }
+      .milk-bg {
+        background: linear-gradient(135deg, #f3f4f6, #d1d5db);
+      }
+      .egg-bg {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      }
+
+      .container {
+        display: flex;
+        flex-direction: row;
+        min-height: 100vh;
+        width: 100vw;
+      }
+
+      .content {
+        flex: 1;
+        padding: 1rem;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .product-image-container {
+        position: relative;
+        height: 16rem;
+        overflow: hidden;
+      }
+
+      /* Wishlist and Cart Icons */
+      .wishlist-icon,
+      .cart-icon {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgb(222, 231, 239);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .wishlist-icon {
+        top: 85px;
+        right: 15px;
+      }
+
+      .cart-icon {
+        top: 15px;
+        right: 15px;
+      }
+
+      .wishlist-icon:hover,
+      .cart-icon:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .wishlist-badge,
+      .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      /* Wishlist and Cart Sidebars */
+      .wishlist-sidebar,
+      .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        max-width: 400px;
+        height: 100%;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .wishlist-sidebar.open,
+      .cart-sidebar.open {
+        right: 0;
+      }
+
+      .wishlist-header,
+      .cart-header {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .wishlist-header h2,
+      .cart-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .close-wishlist,
+      .close-cart {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .close-wishlist:hover,
+      .close-cart:hover {
+        transform: scale(1.1);
+      }
+
+      .wishlist-body,
+      .cart-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .wishlist-item,
+      .cart-item {
+        display: flex;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .wishlist-item:hover,
+      .cart-item:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .wishlist-item-image,
+      .cart-item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .wishlist-item-image img,
+      .cart-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .wishlist-item-details,
+      .cart-item-details {
+        flex: 1;
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .wishlist-item-name,
+      .cart-item-name {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #1f2937;
+        margin-bottom: 0.25rem;
+      }
+
+      .wishlist-item-price,
+      .cart-item-price {
+        font-size: 0.9rem;
+        color: #4b5563;
+        margin-bottom: 0.5rem;
+      }
+
+      .wishlist-item-controls,
+      .cart-item-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .cart-item-quantity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .cart-item-quantity-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .cart-item-quantity-minus {
+        background: #ef4444;
+        color: white;
+      }
+
+      .cart-item-quantity-plus {
+        background: #22c55e;
+        color: white;
+      }
+
+      .cart-item-quantity-count {
+        min-width: 2rem;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .wishlist-item-remove,
+      .cart-item-remove {
+        background: transparent;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: transform 0.2s;
+      }
+
+      .wishlist-item-remove:hover,
+      .cart-item-remove:hover {
+        transform: scale(1.2);
+      }
+
+      .wishlist-footer,
+      .cart-footer {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .wishlist-total,
+      .cart-total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #1f2937;
+      }
+
+      .wishlist-actions,
+      .cart-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .checkout-btn {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .checkout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+      }
+
+      .continue-shopping {
+        background: transparent;
+        border: 1px solid #3b82f6;
+        color: #3b82f6;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .continue-shopping:hover {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .wishlist-empty,
+      .cart-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        color: #6b7280;
+      }
+
+      .wishlist-empty i,
+      .cart-empty i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #d1d5db;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .wishlist-heart {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 5;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .wishlist-heart:hover {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .wishlist-heart.active {
+        color: #ef4444;
+      }
+
+      .wishlist-heart i {
+        font-size: 1.1rem;
+      }
+
+      @media (max-width: 1024px) and (min-width: 801px) {
+        .product-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 800px) {
+        .sidebar {
+          display: flex;
+          width: 120px;
+          flex-direction: column;
+          padding: 1rem;
+          gap: 0.75rem;
+          min-height: 100vh;
+        }
+
+        .category-item {
+          border-radius: 0.5rem;
+          padding: 0.75rem 0.5rem;
+          text-align: center;
+          cursor: pointer;
+        }
+
+        .category-image {
+          width: 50px;
+          height: 50px;
+          border-radius: 0.5rem;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .category-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .category-label {
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+
+        .product-grid {
+          grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+
+        .product-image-container {
+          height: auto;
+          aspect-ratio: 4/3;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .sidebar {
+          width: 100px;
+          padding: 0.5rem;
+        }
+
+        .category-item {
+          padding: 0.5rem 0.25rem;
+        }
+
+        .category-label {
+          font-size: 0.7rem;
+          line-height: 1.2;
+        }
+
+        .category-image {
+          width: 45px;
+          height: 45px;
+        }
+
+        .wishlist-sidebar,
+        .cart-sidebar {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 500px) {
+        body {
+          padding: 0;
+          margin: 0;
+        }
+
+        .container {
+          margin: 0;
+          max-width: 100vw;
+          width: 100vw;
+          padding: 0;
+        }
+
+        .sidebar {
+          width: 80px;
+          padding: 0.25rem;
+          gap: 0.5rem;
+          margin: 0;
+        }
+
+        .category-item {
+          padding: 0.25rem;
+          margin: 0;
+          border-radius: 0.25rem;
+        }
+
+        .category-image {
+          width: 35px;
+          height: 35px;
+          margin-bottom: 0.5rem;
+        }
+
+        .category-label {
+          font-size: 0.65rem;
+          line-height: 1.1;
+        }
+
+        .content {
+          padding: 0.25rem;
+          margin: 0;
+        }
+
+        .content h4 {
+          margin: 0.25rem 0;
+          font-size: 0.9rem;
+        }
+
+        .content hr {
+          margin: 0.25rem 0;
+        }
+
+        .product-grid {
+          gap: 0.25rem;
+          margin: 0;
+          padding: 0;
+        }
+
+        .product-card {
+          margin: 0;
+        }
+
+        .glass-effect {
+          border-radius: 4px;
+        }
+
+        .product-card .p-2 {
+          padding: 0.5rem;
+        }
+
+        .product-card h3 {
+          font-size: 0.875rem;
+        }
+
+        .product-card p {
+          font-size: 0.7rem;
+        }
+
+        .flex.items-center.justify-center span {
+          font-size: 0.75rem;
+        }
+
+        .offer span {
+          font-size: 0.65rem;
+        }
+
+        .quantity-btn {
+          width: 28px;
+          height: 28px;
+          font-size: 1rem;
+        }
+
+        .quantity-count {
+          font-size: 0.75rem;
+          padding: 2px 6px;
+        }
+      }
+
+      .product-card {
+        position: relative;
+      }
+
+      .product-image-container {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Wishlist Icon -->
+    <div class="wishlist-icon" id="wishlistIcon">
+      <span id="wishlistCount" class="wishlist-badge">0</span>
+      <i class="fas fa-heart text-gray-700 text-xl"></i>
+    </div>
+
+    <!-- Cart Icon -->
+    <div class="cart-icon" id="cartIcon">
+      <span id="cartCount" class="cart-badge">0</span>
+      <i class="fas fa-shopping-cart text-gray-700 text-xl"></i>
+    </div>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlistSidebar">
+      <div class="wishlist-header">
+        <h2>Your Wishlist</h2>
+        <button class="close-wishlist" id="closeWishlist">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="wishlist-body">
+        <div id="wishlistItems">
+          <div class="wishlist-empty">
+            <i class="fas fa-heart"></i>
+            <h3 class="text-xl font-semibold mb-2">Your wishlist is empty</h3>
+            <p class="text-gray-500">
+              Add some products you love to your wishlist!
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="wishlist-footer">
+        <div class="wishlist-actions">
+          <button class="continue-shopping" id="continueShoppingWishlist">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button class="close-cart" id="closeCart">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="cart-body">
+        <div id="cartItems">
+          <div class="cart-empty">
+            <i class="fas fa-shopping-cart"></i>
+            <h3 class="text-xl font-semibold mb-2">Your cart is empty</h3>
+            <p class="text-gray-500">
+              Add some delicious products to get started!
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span id="totalPrice">$0.00</span>
+        </div>
+        <div class="cart-actions">
+          <button class="checkout-btn">
+            <i class="fas fa-lock"></i>
+            Proceed to Checkout
+          </button>
+          <button class="continue-shopping" id="continueShopping">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto max-w-7xl">
+      <div class="sidebar">
+        <div class="category-item">
+          <div class="category-image avocado-bg">
+            <img src="./Image/food1.avif" alt="All Foods" />
+          </div>
+          <div class="category-label">ALL</div>
+        </div>
+        <div class="category-item">
+          <div class="category-image potato-bg">
+            <img src="./Image/food2.avif" alt="Organic Vegetables" />
+          </div>
+          <div class="category-label">Organic<br />Vegetables</div>
+        </div>
+        <div class="category-item">
+          <div class="category-image tomato-bg">
+            <img src="./Image/food3.avif" alt="Organic Fruits" />
+          </div>
+          <div class="category-label">Organic<br />Fruits</div>
+        </div>
+        <div class="category-item">
+          <div class="category-image milk-bg">
+            <img src="./Image/food4.avif" alt="Organic Milk" />
+          </div>
+          <div class="category-label">Organic<br />Milk</div>
+        </div>
+        <div class="category-item">
+          <div class="category-image egg-bg">
+            <img src="./Image/food5.avif" alt="Organic Eggs" />
+          </div>
+          <div class="category-label">Organic<br />Eggs</div>
+        </div>
+      </div>
+
+      <div class="content">
+        <h4>6 Items available</h4>
+        <hr />
+
+        <div class="product-grid">
+          <!-- Product Card 1 -->
+          <div
+            class="glass-effect product-card w-full relative"
+            data-product-id="1"
+          >
+            <div class="product-image-container relative">
+              <div
+                class="slides absolute top-0 left-0 flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+              >
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1580841129862-bc2a2d113c45?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+              </div>
+              <div class="slider-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+              </div>
+              <div class="wishlist-heart" onclick="toggleWishlist(1)">
+                <i class="far fa-heart"></i>
+              </div>
+              <div class="quantity-container">
+                <button
+                  class="quantity-btn quantity-minus"
+                  onclick="updateQuantity(1, -1, this)"
+                >
+                  -
+                </button>
+                <span class="quantity-count">0</span>
+                <button
+                  class="quantity-btn quantity-plus initial"
+                  onclick="updateQuantity(1, 1, this)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="p-2 text-center">
+              <h3 class="font-bold text-base text-gray-800">
+                Alaskan King Crab
+              </h3>
+              <p class="text-xs text-gray-600 mb-1">
+                500 g | 12-18 Pieces | Serves 4
+              </p>
+              <div class="flex items-center justify-center mt-1">
+                <span class="text-green-600 font-bold">$44.99</span>
+                <span class="ml-1 text-sm text-gray-500 line-through"
+                  >$49.99</span
+                >
+                <span class="text-green-600 text-sm ml-1">10% off</span>
+              </div>
+              <div class="offer mt-1 flex items-center justify-center">
+                <span class="text-orange-500 text-xs">⚡</span>
+                <span class="ml-1 text-xs text-red-600">Today in 30 mins</span>
+              </div>
+            </div>
+          </div>
+          <!-- Product Card 2 -->
+          <div
+            class="glass-effect product-card w-full relative"
+            data-product-id="2"
+          >
+            <div class="product-image-container relative">
+              <div
+                class="slides absolute top-0 left-0 flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+              >
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1494390248081-4e521a5940db?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1567306301408-9b74779a11af?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+              </div>
+              <div class="slider-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+              </div>
+              <div class="wishlist-heart" onclick="toggleWishlist(2)">
+                <i class="far fa-heart"></i>
+              </div>
+              <div class="quantity-container">
+                <button
+                  class="quantity-btn quantity-minus"
+                  onclick="updateQuantity(2, -1, this)"
+                >
+                  -
+                </button>
+                <span class="quantity-count">0</span>
+                <button
+                  class="quantity-btn quantity-plus initial"
+                  onclick="updateQuantity(2, 1, this)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="p-2 text-center">
+              <h3 class="font-bold text-base text-gray-800">Organic Avocado</h3>
+              <p class="text-xs text-gray-600 mb-1">1 kg | Fresh | Serves 6</p>
+              <div class="flex items-center justify-center mt-1">
+                <span class="text-green-600 font-bold">$12.99</span>
+                <span class="ml-1 text-sm text-gray-500 line-through"
+                  >$15.99</span
+                >
+                <span class="text-green-600 text-sm ml-1">18% off</span>
+              </div>
+              <div class="offer mt-1 flex items-center justify-center">
+                <span class="text-orange-500 text-xs">⚡</span>
+                <span class="ml-1 text-xs text-red-600">Today in 30 mins</span>
+              </div>
+            </div>
+          </div>
+          <!-- Product Card 3 -->
+          <div
+            class="glass-effect product-card w-full relative"
+            data-product-id="3"
+          >
+            <div class="product-image-container relative">
+              <div
+                class="slides absolute top-0 left-0 flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+              >
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1591337676887-a217a6970a8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1528825871115-3581a5387919?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+              </div>
+              <div class="slider-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+              </div>
+              <div class="wishlist-heart" onclick="toggleWishlist(3)">
+                <i class="far fa-heart"></i>
+              </div>
+              <div class="quantity-container">
+                <button
+                  class="quantity-btn quantity-minus"
+                  onclick="updateQuantity(3, -1, this)"
+                >
+                  -
+                </button>
+                <span class="quantity-count">0</span>
+                <button
+                  class="quantity-btn quantity-plus initial"
+                  onclick="updateQuantity(3, 1, this)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="p-2 text-center">
+              <h3 class="font-bold text-base text-gray-800">Free Range Eggs</h3>
+              <p class="text-xs text-gray-600 mb-1">
+                12 Pack | Organic | Fresh
+              </p>
+              <div class="flex items-center justify-center mt-1">
+                <span class="text-green-600 font-bold">$6.99</span>
+                <span class="ml-1 text-sm text-gray-500 line-through"
+                  >$8.99</span
+                >
+                <span class="text-green-600 text-sm ml-1">22% off</span>
+              </div>
+              <div class="offer mt-1 flex items-center justify-center">
+                <span class="text-orange-500 text-xs">⚡</span>
+                <span class="ml-1 text-xs text-red-600">Today in 30 mins</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="glass-effect product-card w-full relative"
+            data-product-id="4"
+          >
+            <div class="product-image-container relative">
+              <div
+                class="slides absolute top-0 left-0 flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+              >
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1574856344991-aaa31b6f4ce3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1582515073490-39981397c445?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+              </div>
+              <div class="slider-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+              </div>
+              <div class="wishlist-heart" onclick="toggleWishlist(4)">
+                <i class="far fa-heart"></i>
+              </div>
+              <div class="quantity-container">
+                <button
+                  class="quantity-btn quantity-minus"
+                  onclick="updateQuantity(4, -1, this)"
+                >
+                  -
+                </button>
+                <span class="quantity-count">0</span>
+                <button
+                  class="quantity-btn quantity-plus initial"
+                  onclick="updateQuantity(4, 1, this)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="p-2 text-center">
+              <h3 class="font-bold text-base text-gray-800">
+                Organic Tomatoes
+              </h3>
+              <p class="text-xs text-gray-600 mb-1">1 kg | Fresh | Serves 8</p>
+              <div class="flex items-center justify-center mt-1">
+                <span class="text-green-600 font-bold">$8.99</span>
+                <span class="ml-1 text-sm text-gray-500 line-through"
+                  >$11.99</span
+                >
+                <span class="text-green-600 text-sm ml-1">25% off</span>
+              </div>
+              <div class="offer mt-1 flex items-center justify-center">
+                <span class="text-orange-500 text-xs">⚡</span>
+                <span class="ml-1 text-xs text-red-600">Today in 30 mins</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="glass-effect product-card w-full relative"
+            data-product-id="5"
+          >
+            <div class="product-image-container relative">
+              <div
+                class="slides absolute top-0 left-0 flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+              >
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+              </div>
+              <div class="slider-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+              </div>
+              <div class="wishlist-heart" onclick="toggleWishlist(5)">
+                <i class="far fa-heart"></i>
+              </div>
+              <div class="quantity-container">
+                <button
+                  class="quantity-btn quantity-minus"
+                  onclick="updateQuantity(5, -1, this)"
+                >
+                  -
+                </button>
+                <span class="quantity-count">0</span>
+                <button
+                  class="quantity-btn quantity-plus initial"
+                  onclick="updateQuantity(5, 1, this)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="p-2 text-center">
+              <h3 class="font-bold text-base text-gray-800">Organic Milk</h3>
+              <p class="text-xs text-gray-600 mb-1">1 Liter | Fresh | Daily</p>
+              <div class="flex items-center justify-center mt-1">
+                <span class="text-green-600 font-bold">$4.99</span>
+                <span class="ml-1 text-sm text-gray-500 line-through"
+                  >$6.99</span
+                >
+                <span class="text-green-600 text-sm ml-1">28% off</span>
+              </div>
+              <div class="offer mt-1 flex items-center justify-center">
+                <span class="text-orange-500 text-xs">⚡</span>
+                <span class="ml-1 text-xs text-red-600">Today in 30 mins</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="glass-effect product-card w-full relative"
+            data-product-id="6"
+          >
+            <div class="product-image-container relative">
+              <div
+                class="slides absolute top-0 left-0 flex w-[300%] h-full transition-transform duration-300 ease-in-out"
+              >
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+                <div
+                  class="w-1/3 bg-cover bg-center"
+                  style="
+                    background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');
+                  "
+                ></div>
+              </div>
+              <div class="slider-indicators">
+                <div class="indicator active" data-index="0"></div>
+                <div class="indicator" data-index="1"></div>
+                <div class="indicator" data-index="2"></div>
+              </div>
+              <div class="wishlist-heart" onclick="toggleWishlist(6)">
+                <i class="far fa-heart"></i>
+              </div>
+              <div class="quantity-container">
+                <button
+                  class="quantity-btn quantity-minus"
+                  onclick="updateQuantity(6, -1, this)"
+                >
+                  -
+                </button>
+                <span class="quantity-count">0</span>
+                <button
+                  class="quantity-btn quantity-plus initial"
+                  onclick="updateQuantity(6, 1, this)"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div class="p-2 text-center">
+              <h3 class="font-bold text-base text-gray-800">
+                Organic Potatoes
+              </h3>
+              <p class="text-xs text-gray-600 mb-1">2 kg | Fresh | Serves 10</p>
+              <div class="flex items-center justify-center mt-1">
+                <span class="text-green-600 font-bold">$7.99</span>
+                <span class="ml-1 text-sm text-gray-500 line-through"
+                  >$9.99</span
+                >
+                <span class="text-green-600 text-sm ml-1">20% off</span>
+              </div>
+              <div class="offer mt-1 flex items-center justify-center">
+                <span class="text-orange-500 text-xs">⚡</span>
+                <span class="ml-1 text-xs text-red-600">Today in 30 mins</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Product data
+      const products = [
+        {
+          id: 1,
+          name: "Alaskan King Crab",
+          price: 49.99,
+          discountPrice: 44.99,
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 2,
+          name: "Organic Avocado",
+          price: 15.99,
+          discountPrice: 12.99,
+          details: "1 kg | Fresh | Serves 6",
+        },
+        {
+          id: 3,
+          name: "Free Range Eggs",
+          price: 8.99,
+          discountPrice: 6.99,
+          details: "12 Pack | Organic | Fresh",
+        },
+        {
+          id: 4,
+          name: "Organic Tomatoes",
+          price: 11.99,
+          discountPrice: 8.99,
+          details: "1 kg | Fresh | Serves 8",
+        },
+        {
+          id: 5,
+          name: "Organic Milk",
+          price: 6.99,
+          discountPrice: 4.99,
+          details: "1 Liter | Fresh | Daily",
+        },
+        {
+          id: 6,
+          name: "Organic Potatoes",
+          price: 9.99,
+          discountPrice: 7.99,
+          details: "2 kg | Fresh | Serves 10",
+        },
+      ];
+
+      let cart = {};
+      let wishlist = {};
+      const currentSlides = [0, 0, 0, 0, 0, 0];
+      let slideIntervals = [];
+
+      // Update quantity function
+      function updateQuantity(productId, change, button) {
+        let quantity = cart[productId] || 0;
+        quantity += change;
+
+        if (quantity <= 0) {
+          quantity = 0;
+          delete cart[productId];
+        } else {
+          cart[productId] = quantity;
+        }
+
+        updateCartUI();
+        updateProductCardUI(productId);
+      }
+
+      // Update product card UI
+      function updateProductCardUI(productId) {
+        const productCard = document.querySelector(
+          `[data-product-id="${productId}"]`
+        );
+        if (!productCard) return;
+
+        const quantity = cart[productId] || 0;
+        const container = productCard.querySelector(".quantity-container");
+        const minusButton = container.querySelector(".quantity-minus");
+        const countElement = container.querySelector(".quantity-count");
+        const plusButton = container.querySelector(".quantity-plus");
+
+        if (quantity > 0) {
+          minusButton.classList.add("visible");
+          countElement.classList.add("visible");
+          plusButton.classList.add("moved");
+          plusButton.classList.remove("initial");
+        } else {
+          minusButton.classList.remove("visible");
+          countElement.classList.remove("visible");
+          plusButton.classList.remove("moved");
+          plusButton.classList.add("initial");
+        }
+
+        countElement.textContent = quantity;
+        if (countElement.classList.contains("changing")) {
+          countElement.classList.remove("changing");
+        }
+      }
+
+      // Toggle wishlist function
+      function toggleWishlist(productId) {
+        const heartIcon = document.querySelector(
+          `.wishlist-heart[onclick="toggleWishlist(${productId})"] i`
+        );
+
+        if (wishlist[productId]) {
+          delete wishlist[productId];
+          heartIcon.classList.remove("fas", "fa-heart");
+          heartIcon.classList.add("far", "fa-heart");
+          heartIcon.closest(".wishlist-heart").classList.remove("active");
+        } else {
+          wishlist[productId] = true;
+          heartIcon.classList.remove("far", "fa-heart");
+          heartIcon.classList.add("fas", "fa-heart");
+          heartIcon.closest(".wishlist-heart").classList.add("active");
+        }
+
+        updateWishlistUI();
+      }
+
+      // Update cart UI
+      function updateCartUI() {
+        const cartCount = Object.values(cart).reduce(
+          (sum, qty) => sum + qty,
+          0
+        );
+        const totalPrice = Object.entries(cart).reduce((sum, [id, qty]) => {
+          const product = products.find((p) => p.id == id);
+          return sum + (product ? product.discountPrice * qty : 0);
+        }, 0);
+
+        document.getElementById("cartCount").textContent = cartCount;
+        document.getElementById(
+          "totalPrice"
+        ).textContent = `$${totalPrice.toFixed(2)}`;
+
+        const cartItems = document.getElementById("cartItems");
+
+        if (cartCount === 0) {
+          cartItems.innerHTML = `
+            <div class="cart-empty">
+              <i class="fas fa-shopping-cart"></i>
+              <h3 class="text-xl font-semibold mb-2">Your cart is empty</h3>
+              <p class="text-gray-500">Add some delicious products to get started!</p>
+            </div>
+          `;
+        } else {
+          let cartHTML = "";
+          for (const [id, qty] of Object.entries(cart)) {
+            const product = products.find((p) => p.id == id);
+            if (product) {
+              cartHTML += `
+              <div class="cart-item">
+                <div class="cart-item-image">
+                  <img src="https://images.unsplash.com/photo-1580841129862-bc2a2d113c45?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="${
+                    product.name
+                  }">
+                </div>
+                <div class="cart-item-details">
+                  <h4 class="cart-item-name">${product.name}</h4>
+                  <p class="cart-item-price">$${(
+                    product.discountPrice * qty
+                  ).toFixed(2)}</p>
+                  <div class="cart-item-controls">
+                    <div class="cart-item-quantity">
+                      <button class="cart-item-quantity-btn cart-item-quantity-minus" onclick="updateQuantity(${
+                        product.id
+                      }, -1)">-</button>
+                      <span class="cart-item-quantity-count">${qty}</span>
+                      <button class="cart-item-quantity-btn cart-item-quantity-plus" onclick="updateQuantity(${
+                        product.id
+                      }, 1)">+</button>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${
+                      product.id
+                    })">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+            }
+          }
+          cartItems.innerHTML = cartHTML;
+        }
+      }
+
+      // Remove from cart
+      function removeFromCart(productId) {
+        delete cart[productId];
+        updateCartUI();
+        updateProductCardUI(productId);
+      }
+
+      // Update wishlist UI
+      function updateWishlistUI() {
+        const wishlistCount = Object.keys(wishlist).length;
+        document.getElementById("wishlistCount").textContent = wishlistCount;
+
+        const wishlistItems = document.getElementById("wishlistItems");
+
+        if (wishlistCount === 0) {
+          wishlistItems.innerHTML = `
+            <div class="wishlist-empty">
+              <i class="fas fa-heart"></i>
+              <h3 class="text-xl font-semibold mb-2">Your wishlist is empty</h3>
+              <p class="text-gray-500">Add some products you love to your wishlist!</p>
+            </div>
+          `;
+        } else {
+          let wishlistHTML = "";
+          for (const id of Object.keys(wishlist)) {
+            const product = products.find((p) => p.id == id);
+            if (product) {
+              wishlistHTML += `
+              <div class="wishlist-item">
+                <div class="wishlist-item-image">
+                  <img src="https://images.unsplash.com/photo-1580841129862-bc2a2d113c45?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="${
+                    product.name
+                  }">
+                </div>
+                <div class="wishlist-item-details">
+                  <h4 class="wishlist-item-name">${product.name}</h4>
+                  <p class="wishlist-item-price">$${product.discountPrice.toFixed(
+                    2
+                  )}</p>
+                  <div class="wishlist-item-controls">
+                    <button class="checkout-btn" onclick="addToCartFromWishlist(${
+                      product.id
+                    })">
+                      <i class="fas fa-cart-plus"></i>
+                      Add to Cart
+                    </button>
+                    <button class="wishlist-item-remove" onclick="removeFromWishlist(${
+                      product.id
+                    })">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+            }
+          }
+          wishlistItems.innerHTML = wishlistHTML;
+        }
+      }
+
+      // Remove from wishlist
+      function removeFromWishlist(productId) {
+        delete wishlist[productId];
+        updateWishlistUI();
+
+        // Update the heart icon on the product card
+        const heartIcon = document.querySelector(
+          `.wishlist-heart[onclick="toggleWishlist(${productId})"] i`
+        );
+        heartIcon.classList.remove("fas", "fa-heart");
+        heartIcon.classList.add("far", "fa-heart");
+        heartIcon.closest(".wishlist-heart").classList.remove("active");
+      }
+
+      // Add to cart from wishlist
+      function addToCartFromWishlist(productId) {
+        cart[productId] = (cart[productId] || 0) + 1;
+        updateCartUI();
+        updateProductCardUI(productId);
+      }
+
+      // Initialize wishlist and cart sidebars
+      function initSidebars() {
+        const wishlistIcon = document.getElementById("wishlistIcon");
+        const wishlistSidebar = document.getElementById("wishlistSidebar");
+        const closeWishlist = document.getElementById("closeWishlist");
+        const cartIcon = document.getElementById("cartIcon");
+        const cartSidebar = document.getElementById("cartSidebar");
+        const closeCart = document.getElementById("closeCart");
+        const overlay = document.getElementById("overlay");
+        const continueShoppingWishlist = document.getElementById(
+          "continueShoppingWishlist"
+        );
+        const continueShopping = document.getElementById("continueShopping");
+
+        function openWishlist() {
+          wishlistSidebar.classList.add("open");
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeWishlistSidebar() {
+          wishlistSidebar.classList.remove("open");
+          overlay.classList.remove("active");
+          document.body.style.overflow = "auto";
+        }
+
+        function openCart() {
+          cartSidebar.classList.add("open");
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeCartSidebar() {
+          cartSidebar.classList.remove("open");
+          overlay.classList.remove("active");
+          document.body.style.overflow = "auto";
+        }
+
+        wishlistIcon.addEventListener("click", openWishlist);
+        closeWishlist.addEventListener("click", closeWishlistSidebar);
+        cartIcon.addEventListener("click", openCart);
+        closeCart.addEventListener("click", closeCartSidebar);
+        overlay.addEventListener("click", () => {
+          closeWishlistSidebar();
+          closeCartSidebar();
+        });
+        continueShoppingWishlist.addEventListener(
+          "click",
+          closeWishlistSidebar
+        );
+        continueShopping.addEventListener("click", closeCartSidebar);
+      }
+
+      // Image slider functionality
+      function updateIndicators(cardIndex) {
+        const card = document.querySelectorAll(".product-card")[cardIndex];
+        const indicators = card.querySelectorAll(".indicator");
+        indicators.forEach((ind, i) => {
+          ind.classList.toggle("active", i === currentSlides[cardIndex]);
+        });
+      }
+
+      function startAutoSlide(slidesDiv, index) {
+        let interval = setInterval(() => {
+          currentSlides[index] = (currentSlides[index] + 1) % 3;
+          slidesDiv.style.transform = `translateX(-${
+            currentSlides[index] * (100 / 3)
+          }%)`;
+          updateIndicators(index);
+        }, 1500);
+        slideIntervals[index] = interval;
+      }
+
+      document.querySelectorAll(".product-card").forEach((card, index) => {
+        const slidesDiv = card.querySelector(".slides");
+        card.addEventListener("mouseenter", () => {
+          if (slideIntervals[index]) clearInterval(slideIntervals[index]);
+          startAutoSlide(slidesDiv, index);
+        });
+        card.addEventListener("mouseleave", () => {
+          if (slideIntervals[index]) clearInterval(slideIntervals[index]);
+          slideIntervals[index] = null;
+        });
+      });
+
+      // Category selection
+      document.querySelectorAll(".category-item").forEach((item, index) => {
+        item.addEventListener("click", function () {
+          document.querySelectorAll(".category-item").forEach((i) => {
+            i.classList.remove("ring-2", "ring-green-500", "ring-offset-2");
+          });
+          this.classList.add("ring-2", "ring-green-500", "ring-offset-2");
+          console.log(
+            "Category selected:",
+            this.querySelector(".category-label").textContent.trim()
+          );
+        });
+      });
+
+      document
+        .querySelector(".category-item")
+        ?.classList.add("ring-2", "ring-green-500", "ring-offset-2");
+
+      // Initialize everything when DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        initSidebars();
+        updateCartUI();
+        updateWishlistUI();
+
+        // Initialize all product card quantities
+        products.forEach((product) => {
+          updateProductCardUI(product.id);
+        });
+      });
+    </script>
+  </body>
+</html>

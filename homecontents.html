@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ocean's Finest - Premium Seafood</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #ffffff;
+      }
+
+      .scroll-container {
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+      }
+
+      .scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .slider-container {
+        position: relative;
+        width: 100%;
+        max-width: 1250px;
+        margin: 1rem auto;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .slide.active {
+        opacity: 1;
+        position: relative;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        color: white;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+
+      .slider-nav:hover {
+        background: rgba(0, 0, 0, 0.7);
+      }
+
+      .slider-nav.prev {
+        left: 10px;
+      }
+
+      .slider-nav.next {
+        right: 10px;
+      }
+
+      .slider-indicators {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+      }
+
+      .indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .indicator.active {
+        background: white;
+        transform: scale(1.2);
+      }
+
+      .cart-icon {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgb(222, 231, 239);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+      }
+
+      .cart-icon:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      .wishlist-icon {
+        position: fixed;
+        top: 85px; /* Positioned below the cart icon */
+        right: 15px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgb(222, 231, 239);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+      }
+
+      .wishlist-icon:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .wishlist-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      .category-image {
+        transition: transform 0.3s ease;
+      }
+
+      .quantity-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 32px;
+        transition: all 0.3s ease;
+      }
+
+      .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        transform: scale(1);
+      }
+
+      .quantity-btn:hover {
+        transform: scale(1.1);
+      }
+
+      .quantity-btn:active {
+        transform: scale(0.95);
+      }
+
+      .quantity-plus {
+        background: #22c55e;
+        color: white;
+      }
+
+      .quantity-plus.initial {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+      }
+
+      .quantity-plus.moved {
+        position: static;
+        transform: translateX(0) scale(1);
+      }
+
+      .quantity-minus {
+        background: #ef4444;
+        color: white;
+        opacity: 0;
+        transform: translateX(20px) scale(0.5);
+        visibility: hidden;
+      }
+
+      .quantity-minus.visible {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        visibility: visible;
+      }
+
+      .quantity-count {
+        opacity: 0;
+        transform: translateY(10px);
+        min-width: 2rem;
+        text-align: center;
+        background: #f3f4f6;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .quantity-count.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .quantity-count.changing {
+        transform: scale(1.2);
+        background: #e5e7eb;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .add-to-cart-effect {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #22c55e;
+        border-radius: 50%;
+        animation: cartPop 0.5s ease-out forwards;
+      }
+
+      @keyframes cartPop {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.5);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(0);
+          opacity: 0;
+        }
+      }
+
+      .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        max-width: 400px;
+        height: 100%;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .cart-sidebar.open {
+        right: 0;
+      }
+
+      .wishlist-sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        max-width: 400px;
+        height: 100%;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .wishlist-sidebar.open {
+        right: 0;
+      }
+
+      .cart-header,
+      .wishlist-header {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .cart-header h2,
+      .wishlist-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .close-cart,
+      .close-wishlist {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .close-cart:hover,
+      .close-wishlist:hover {
+        transform: scale(1.1);
+      }
+
+      .cart-body,
+      .wishlist-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .cart-item,
+      .wishlist-item {
+        display: flex;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .cart-item:hover,
+      .wishlist-item:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .cart-item-image,
+      .wishlist-item-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .cart-item-image img,
+      .wishlist-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .cart-item-details,
+      .wishlist-item-details {
+        flex: 1;
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .cart-item-name,
+      .wishlist-item-name {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #1f2937;
+        margin-bottom: 0.25rem;
+      }
+
+      .cart-item-price,
+      .wishlist-item-price {
+        font-size: 0.9rem;
+        color: #4b5563;
+        margin-bottom: 0.5rem;
+      }
+
+      .cart-item-controls,
+      .wishlist-item-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .cart-item-quantity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .cart-item-quantity-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .cart-item-quantity-minus {
+        background: #ef4444;
+        color: white;
+      }
+
+      .cart-item-quantity-plus {
+        background: #22c55e;
+        color: white;
+      }
+
+      .cart-item-quantity-count {
+        min-width: 2rem;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .cart-item-remove,
+      .wishlist-item-remove {
+        background: transparent;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: transform 0.2s;
+      }
+
+      .cart-item-remove:hover,
+      .wishlist-item-remove:hover {
+        transform: scale(1.2);
+      }
+
+      .cart-footer,
+      .wishlist-footer {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .cart-total,
+      .wishlist-total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #1f2937;
+      }
+
+      .cart-actions,
+      .wishlist-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .checkout-btn {
+        background: linear-gradient(135deg, #1e40af, #3b82f6);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .checkout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+      }
+
+      .continue-shopping {
+        background: transparent;
+        border: 1px solid #3b82f6;
+        color: #3b82f6;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .continue-shopping:hover {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .cart-empty,
+      .wishlist-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        color: #6b7280;
+      }
+
+      .cart-empty i,
+      .wishlist-empty i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #d1d5db;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      @media (max-width: 640px) {
+        .product-card {
+          min-width: 150px;
+        }
+        .slider-nav {
+          width: 30px;
+          height: 30px;
+          font-size: 1rem;
+        }
+        .cart-icon,
+        .wishlist-icon {
+          width: 50px;
+          height: 50px;
+        }
+        .quantity-btn {
+          width: 28px;
+          height: 28px;
+          font-size: 1rem;
+        }
+        .cart-sidebar,
+        .wishlist-sidebar {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 641px) and (max-width: 768px) {
+        .product-card {
+          min-width: 180px;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .product-card {
+          min-width: 200px;
+        }
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+      }
+
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .product-image-container {
+        position: relative;
+        overflow: hidden;
+        height: 140px;
+      }
+
+      .product-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+
+      .product-card:hover .product-image-container img {
+        transform: scale(1.08);
+      }
+
+      .product-content {
+        padding: 0.75rem;
+        text-align: center;
+      }
+
+      .product-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #111827;
+        line-height: 1.2;
+        margin-bottom: 0.25rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .product-details {
+        font-size: 0.8rem;
+        color: #484849;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-pricing {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .product-discount-price {
+        font-weight: 700;
+        color: #16a34a;
+        font-size: 1rem;
+      }
+
+      .product-original-price {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        text-decoration: line-through;
+      }
+
+      .product-discount-percent {
+        font-size: 0.85rem;
+        color: #16a34a;
+        font-weight: 500;
+      }
+
+      .product-offer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        color: #ff0000;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-offer-icon {
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .quantity-container {
+        margin-top: 0.25rem;
+      }
+
+      .product-card.glass-effect {
+        background: white;
+        backdrop-filter: none;
+        border: none;
+      }
+
+      .wishlist-heart {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 5;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .wishlist-heart:hover {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .wishlist-heart.active {
+        color: #ef4444;
+      }
+
+      .wishlist-heart i {
+        font-size: 1.1rem;
+      }
+    </style>
+  </head>
+  <body class="gradient-bg min-h-screen font-sans antialiased">
+    <!-- Cart Icon -->
+    <div class="cart-icon" id="cartIcon">
+      <span id="cartCount" class="cart-badge">0</span>
+      <i
+        class="fas fa-shopping-cart text-gray-700 text-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      ></i>
+    </div>
+
+    <!-- Wishlist Icon - Positioned below cart -->
+    <div class="wishlist-icon" id="wishlistIcon">
+      <span id="wishlistCount" class="wishlist-badge">0</span>
+      <i
+        class="fas fa-heart text-gray-700 text-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      ></i>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button class="close-cart" id="closeCart">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="cart-body">
+        <div id="cartItems">
+          <div class="cart-empty">
+            <i class="fas fa-shopping-cart"></i>
+            <h3 class="text-xl font-semibold mb-2">Your cart is empty</h3>
+            <p class="text-gray-500">
+              Add some delicious seafood to get started!
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total:</span>
+          <span id="totalPrice">$0.00</span>
+        </div>
+        <div class="cart-actions">
+          <button class="checkout-btn">
+            <i class="fas fa-lock"></i>
+            Proceed to Checkout
+          </button>
+          <button class="continue-shopping" id="continueShopping">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wishlist Sidebar -->
+    <div class="wishlist-sidebar" id="wishlistSidebar">
+      <div class="wishlist-header">
+        <h2>Your Wishlist</h2>
+        <button class="close-wishlist" id="closeWishlist">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="wishlist-body">
+        <div id="wishlistItems">
+          <div class="wishlist-empty">
+            <i class="fas fa-heart"></i>
+            <h3 class="text-xl font-semibold mb-2">Your wishlist is empty</h3>
+            <p class="text-gray-500">
+              Add some products you love to your wishlist!
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="wishlist-footer">
+        <div class="wishlist-actions">
+          <button class="continue-shopping" id="continueShoppingWishlist">
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Rest of the page content remains the same -->
+    <div class="slider-container">
+      <div class="slide active">
+        <img
+          src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+          alt="Fresh Seafood Selection"
+          class="w-full h-64 sm:h-80 md:h-96 object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-6 left-4 sm:left-8 text-white max-w-xs sm:max-w-md"
+        >
+          <h2 class="text-lg sm:text-2xl md:text-3xl font-bold mb-2">
+            Fresh Seafood Selection
+          </h2>
+          <p class="text-sm sm:text-base opacity-90 mb-3">
+            The finest selection of seafood delivered straight to your door
+          </p>
+          <button
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+          >
+            Shop Now
+          </button>
+        </div>
+      </div>
+      <div class="slide">
+        <img
+          src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+          alt="Premium Salmon"
+          class="w-full h-64 sm:h-80 md:h-96 object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-6 left-4 sm:left-8 text-white max-w-xs sm:max-w-md"
+        >
+          <h2 class="text-lg sm:text-2xl md:text-3xl font-bold mb-2">
+            Premium Atlantic Salmon
+          </h2>
+          <p class="text-sm sm:text-base opacity-90 mb-3">
+            Freshly caught salmon with exceptional flavor and texture
+          </p>
+          <button
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+          >
+            Shop Now
+          </button>
+        </div>
+      </div>
+      <div class="slide">
+        <img
+          src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
+          alt="Lobster Special"
+          class="w-full h-64 sm:h-80 md:h-96 object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-6 left-4 sm:left-8 text-white max-w-xs sm:max-w-md"
+        >
+          <h2 class="text-lg sm:text-2xl md:text-3xl font-bold mb-2">
+            Exquisite Lobster
+          </h2>
+          <p class="text-sm sm:text-base opacity-90 mb-3">
+            Premium lobster delivered fresh for your special occasions
+          </p>
+          <button
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+          >
+            Shop Now
+          </button>
+        </div>
+      </div>
+      <button class="slider-nav prev" id="sliderPrev">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="slider-nav next" id="sliderNext">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div class="slider-indicators">
+        <div class="indicator active" data-index="0"></div>
+        <div class="indicator" data-index="1"></div>
+        <div class="indicator" data-index="2"></div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+        Shop by Categories
+      </h1>
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-7"
+      >
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img src="./Image/food1.avif" alt="Chicken" class="w-15 h-15" />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Chicken</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food2.avif"
+              alt="Fish & Seafood"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Fish & Seafood</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food3.avif"
+              alt="Ready to cook"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Ready to cook</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food4.avif"
+              alt="Licious Specials"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Licious Specials</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food5.avif"
+              alt="Pujo Specials"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Pujo Specials</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food6.avif"
+              alt="Mutton"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Mutton</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food7.avif"
+              alt="Liver & More"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Liver & More</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food8.avif"
+              alt="Prawns & Crabs"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Prawns & Crabs</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food1.avif"
+              alt="Eggs"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Eggs</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food2.avif"
+              alt="Crispy Snacks"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Crispy Snacks</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food3.avif"
+              alt="Combos"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Combos</h3>
+        </div>
+        <div
+          class="category-card bg-white rounded-lg p-3 text-center shadow-sm"
+        >
+          <div class="category-image mb-2 flex justify-center">
+            <img
+              src="./Image/food4.avif"
+              alt="Meat Masala"
+              class="w-15 h-15 rounded-full object-contain"
+            />
+          </div>
+          <h3 class="text-sm font-semibold text-gray-700">Meat Masala</h3>
+        </div>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-8 mb-4">
+        Best Sellers
+      </h1>
+      <div class="carousel-container relative">
+        <button
+          id="bestSellerPrev"
+          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 font-bold py-2 px-3 rounded-full transition shadow-md hover:shadow-lg hover:scale-110"
+        >
+          ←
+        </button>
+        <div
+          id="bestSellerCarousel"
+          class="scroll-container flex overflow-x-auto gap-4 snap-x snap-mandatory"
+        ></div>
+        <button
+          id="bestSellerNext"
+          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 font-bold py-2 px-3 rounded-full transition shadow-md hover:shadow-lg hover:scale-110"
+        >
+          →
+        </button>
+      </div>
+
+      <section class="py-8">
+        <div
+          class="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg p-6 flex flex-col md:flex-row items-center gap-6"
+        >
+          <div class="md:w-1/2 text-center md:text-left">
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 mb-4"
+            >
+              <h1 class="text-2xl sm:text-3xl font-bold">Barakat</h1>
+              <h1 class="text-2xl sm:text-3xl font-bold">PlayStation</h1>
+            </div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+              PLAY IT COOL
+            </h2>
+            <p
+              class="text-sm sm:text-base md:text-lg mb-6 max-w-md mx-auto md:mx-0"
+            >
+              Two bold flavors. One epic collab.<br />Cool down with Barakat x
+              PlayStation.<br />Sea Salt Vanilla Ice Cream & Blue Electric Lemon
+              Mint Juice Pop
+            </p>
+            <a
+              href="#"
+              class="inline-block bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-800 transition"
+              >Shop Now</a
+            >
+          </div>
+          <div class="md:w-1/2 flex justify-center">
+            <img
+              src="./Image/laptop36.webp"
+              alt="Barakat x PlayStation Promo"
+              class="w-full max-w-xs sm:max-w-sm h-auto object-contain"
+            />
+          </div>
+        </div>
+      </section>
+
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-8 mb-4">
+        New Arrivals
+      </h1>
+      <div class="carousel-container relative">
+        <button
+          id="latestProductsPrev"
+          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 font-bold py-2 px-3 rounded-full transition shadow-md hover:shadow-lg hover:scale-110"
+        >
+          ←
+        </button>
+        <div
+          id="latestProductsCarousel"
+          class="scroll-container flex overflow-x-auto gap-4 snap-x snap-mandatory"
+        ></div>
+        <button
+          id="latestProductsNext"
+          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 font-bold py-2 px-3 rounded-full transition shadow-md hover:shadow-lg hover:scale-110"
+        >
+          →
+        </button>
+      </div>
+
+      <section class="py-8">
+        <div
+          class="bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg p-6 flex flex-col md:flex-row items-center gap-6"
+        >
+          <div class="md:w-1/2 text-center md:text-left">
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 mb-4"
+            >
+              <h1 class="text-2xl sm:text-3xl font-bold">Barakat</h1>
+              <h1 class="text-2xl sm:text-3xl font-bold">PlayStation</h1>
+            </div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+              PLAY IT COOL
+            </h2>
+            <p
+              class="text-sm sm:text-base md:text-lg mb-6 max-w-md mx-auto md:mx-0"
+            >
+              Two bold flavors. One epic collab.<br />Cool down with Barakat x
+              PlayStation.<br />Sea Salt Vanilla Ice Cream & Blue Electric Lemon
+              Mint Juice Pop
+            </p>
+            <a
+              href="#"
+              class="inline-block bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-800 transition"
+              >Shop Now</a
+            >
+          </div>
+          <div class="md:w-1/2 flex justify-center">
+            <img
+              src="./Image/laptop36.webp"
+              alt="Barakat x PlayStation Promo"
+              class="w-full max-w-xs sm:max-w-sm h-auto object-contain"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">
+          Why Choose Ocean's Finest
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i class="fas fa-fish text-4xl text-blue-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">
+              Freshness Guaranteed
+            </h3>
+            <p class="text-gray-600">
+              We source our seafood daily from trusted fishermen to ensure the
+              highest quality and freshness.
+            </p>
+          </div>
+          <div
+            class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i class="fas fa-leaf text-4xl text-green-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">
+              Sustainable Sourcing
+            </h3>
+            <p class="text-gray-600">
+              We're committed to sustainable fishing practices that protect our
+              oceans for future generations.
+            </p>
+          </div>
+          <div
+            class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i class="fas fa-shipping-fast text-4xl text-red-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">
+              Fast Delivery
+            </h3>
+            <p class="text-gray-600">
+              Get your orders delivered quickly in temperature-controlled
+              packaging to maintain freshness.
+            </p>
+          </div>
+          <div
+            class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i class="fas fa-star text-4xl text-yellow-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">
+              Expert Selection
+            </h3>
+            <p class="text-gray-600">
+              Our seafood experts carefully select only the finest products for
+              our customers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <div class="container mx-auto text-center">
+        <h2
+          class="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 sm:mb-12 tracking-wide"
+        >
+          What Our Customers Say
+        </h2>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+        >
+          <div
+            class="testimonial-card rounded-xl shadow-md p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="John Doe"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
+              Michael Johnson
+            </h3>
+            <p class="text-sm text-gray-500 mb-4">Seattle, USA</p>
+            <div class="flex mb-4">
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+            </div>
+            <p class="text-sm sm:text-base text-gray-600 italic">
+              "The salmon I ordered was incredibly fresh and flavorful. Will
+              definitely be ordering again!"
+            </p>
+          </div>
+
+          <div
+            class="testimonial-card rounded-xl shadow-md p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="Jane Smith"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
+              Sarah Williams
+            </h3>
+            <p class="text-sm text-gray-500 mb-4">San Diego, USA</p>
+            <div class="flex mb-4">
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+            </div>
+            <p class="text-sm sm:text-base text-gray-600 italic">
+              "The lobster was restaurant quality but at a fraction of the
+              price. Delivery was prompt and packaging excellent."
+            </p>
+          </div>
+
+          <div
+            class="testimonial-card rounded-xl shadow-md p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="Alice Johnson"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
+              David Chen
+            </h3>
+            <p class="text-sm text-gray-500 mb-4">Portland, USA</p>
+            <div class="flex mb-4">
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+            </div>
+            <p class="text-sm sm:text-base text-gray-600 italic">
+              "I've tried several seafood delivery services, and Ocean's Finest
+              is by far the best. Quality is consistently excellent."
+            </p>
+          </div>
+
+          <div
+            class="testimonial-card rounded-xl shadow-md p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="Bob Brown"
+              class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
+              Emily Rodriguez
+            </h3>
+            <p class="text-sm text-gray-500 mb-4">Miami, USA</p>
+            <div class="flex mb-4">
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+              <span class="star text-xl sm:text-2xl">★</span>
+            </div>
+            <p class="text-sm sm:text-base text-gray-600 italic">
+              "The customer service is outstanding. They helped me choose the
+              perfect fish for a special dinner party."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bg-gray-900 text-white py-8 px-4 sm:px-6 lg:px-8">
+      <div
+        class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
+        <div>
+          <h3 class="text-lg font-bold mb-3">Ocean's Finest</h3>
+          <p class="text-gray-400 text-sm">
+            Premium seafood delivered straight to your door. Freshness
+            guaranteed.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold mb-3">Quick Links</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Shop</a></li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white">About Us</a>
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold mb-3">Customer Service</h3>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white"
+                >Shipping Information</a
+              >
+            </li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white"
+                >Returns & Refunds</a
+              >
+            </li>
+            <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+            <li>
+              <a href="#" class="text-gray-400 hover:text-white"
+                >Terms & Conditions</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold mb-3">Contact Us</h3>
+          <address class="text-gray-400 text-sm not-italic">
+            <p>123 Ocean Avenue</p>
+            <p>Seaside, CA 93955</p>
+            <p class="mt-2">info@oceansfinest.com</p>
+            <p>+1 (555) 123-4567</p>
+          </address>
+        </div>
+      </div>
+      <div
+        class="max-w-7xl mx-auto mt-6 pt-6 border-t border-gray-800 text-center text-gray-400 text-sm"
+      >
+        <p>&copy; 2023 Ocean's Finest. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      const bestSellerProducts = [
+        {
+          id: 1,
+          name: "Fresh Atlantic Salmon",
+          price: 24.99,
+          discountPrice: 22.49,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 2,
+          name: "Alaskan King Crab",
+          price: 49.99,
+          discountPrice: 44.99,
+          image:
+            "https://images.unsplash.com/photo-1580841129862-bc2a2d113c45?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 3,
+          name: "Wild Caught Tuna Steaks",
+          price: 29.99,
+          discountPrice: 26.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 4,
+          name: "Jumbo Shrimp",
+          price: 19.99,
+          discountPrice: 17.99,
+          image:
+            "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 5,
+          name: "Fresh Oysters",
+          price: 15.99,
+          discountPrice: 14.39,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 6,
+          name: "Sea Scallops",
+          price: 27.99,
+          discountPrice: 25.19,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+      ];
+
+      const latestProducts = [
+        {
+          id: 7,
+          name: "Lobster Tails",
+          price: 39.99,
+          discountPrice: 35.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 8,
+          name: "Swordfish Steaks",
+          price: 22.99,
+          discountPrice: 20.69,
+          image:
+            "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 9,
+          name: "Mussels",
+          price: 12.99,
+          discountPrice: 11.69,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 10,
+          name: "Rainbow Trout",
+          price: 18.99,
+          discountPrice: 17.09,
+          image:
+            "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 11,
+          name: "Squid",
+          price: 14.99,
+          discountPrice: 13.49,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+        {
+          id: 12,
+          name: "Halibut Steaks",
+          price: 26.99,
+          discountPrice: 24.29,
+          image:
+            "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+          details: "500 g | 12-18 Pieces | Serves 4",
+        },
+      ];
+
+      let cart = {};
+      let wishlist = {};
+
+      function createProductCard(product) {
+        const discountPercentage = Math.round(
+          ((product.price - product.discountPrice) / product.price) * 100
+        );
+        const quantity = cart[product.id] || 0;
+        const isWishlisted = wishlist[product.id] || false;
+
+        return `
+        <div class="product-card flex-shrink-0 min-w-[150px] sm:min-w-[180px] md:min-w-[200px] snap-start">
+          <div class="product-image-container relative">
+            <img src="${product.image}" alt="${product.name}" loading="lazy" />
+            <div class="wishlist-heart ${
+              isWishlisted ? "active" : ""
+            }" onclick="toggleWishlist(${product.id})">
+              <i class="${isWishlisted ? "fas" : "far"} fa-heart"></i>
+            </div>
+            <div class="absolute bottom-1 right-1 flex items-center space-x-1">
+              <button 
+                class="quantity-btn quantity-minus ${
+                  quantity > 0 ? "visible" : ""
+                }" 
+                onclick="updateQuantity(${product.id}, -1, this)"
+              >
+                <i class="fas fa-minus"></i>
+              </button>
+              <span class="quantity-count ${
+                quantity > 0 ? "visible" : ""
+              }">${quantity}</span>
+              <button 
+                class="quantity-btn quantity-plus ${
+                  quantity > 0 ? "moved" : "initial"
+                }" 
+                onclick="updateQuantity(${product.id}, 1, this)"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-details">${product.details || ""}</p>
+            <div class="product-pricing">
+              <span class="product-discount-price">$${product.discountPrice.toFixed(
+                2
+              )}</span>
+              <span class="product-original-price">$${product.price.toFixed(
+                2
+              )}</span>
+              <span class="product-discount-percent">${discountPercentage}% off</span>
+            </div>
+            <div class="product-offer">
+              <span class="product-offer-icon">⚡</span>
+              <span>Today in 30 mins</span>
+            </div>
+          </div>
+        </div>
+      `;
+      }
+
+      function updateQuantity(productId, change, button) {
+        const prevQuantity = cart[productId] || 0;
+        cart[productId] = prevQuantity + change;
+
+        if (cart[productId] <= 0) {
+          delete cart[productId];
+        }
+
+        updateCartUI();
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+      }
+
+      function toggleWishlist(productId) {
+        if (wishlist[productId]) {
+          delete wishlist[productId];
+        } else {
+          wishlist[productId] = true;
+        }
+
+        updateWishlistUI();
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+      }
+
+      function renderProducts(carouselId, products) {
+        const carousel = document.getElementById(carouselId);
+        carousel.innerHTML = products
+          .map((product) => createProductCard(product))
+          .join("");
+      }
+
+      function updateCartUI() {
+        const cartCount = Object.values(cart).reduce(
+          (sum, qty) => sum + qty,
+          0
+        );
+        const totalPrice = Object.entries(cart).reduce((sum, [id, qty]) => {
+          let product =
+            bestSellerProducts.find((p) => p.id == id) ||
+            latestProducts.find((p) => p.id == id);
+          return sum + (product ? product.discountPrice * qty : 0);
+        }, 0);
+
+        document.getElementById("cartCount").textContent = cartCount;
+        document.getElementById(
+          "totalPrice"
+        ).textContent = `$${totalPrice.toFixed(2)}`;
+
+        const cartItems = document.getElementById("cartItems");
+
+        if (cartCount === 0) {
+          cartItems.innerHTML = `
+            <div class="cart-empty">
+              <i class="fas fa-shopping-cart"></i>
+              <h3 class="text-xl font-semibold mb-2">Your cart is empty</h3>
+              <p class="text-gray-500">Add some delicious seafood to get started!</p>
+            </div>
+          `;
+        } else {
+          let cartHTML = "";
+          for (const [id, qty] of Object.entries(cart)) {
+            let product =
+              bestSellerProducts.find((p) => p.id == id) ||
+              latestProducts.find((p) => p.id == id);
+            if (product) {
+              cartHTML += `
+              <div class="cart-item">
+                <div class="cart-item-image">
+                  <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="cart-item-details">
+                  <h4 class="cart-item-name">${product.name}</h4>
+                  <p class="cart-item-price">$${(
+                    product.discountPrice * qty
+                  ).toFixed(2)}</p>
+                  <div class="cart-item-controls">
+                    <div class="cart-item-quantity">
+                      <button class="cart-item-quantity-btn cart-item-quantity-minus" onclick="updateQuantity(${
+                        product.id
+                      }, -1, this)">-</button>
+                      <span class="cart-item-quantity-count">${qty}</span>
+                      <button class="cart-item-quantity-btn cart-item-quantity-plus" onclick="updateQuantity(${
+                        product.id
+                      }, 1, this)">+</button>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${
+                      product.id
+                    })">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+            }
+          }
+          cartItems.innerHTML = cartHTML;
+        }
+      }
+
+      function updateWishlistUI() {
+        const wishlistCount = Object.keys(wishlist).length;
+        document.getElementById("wishlistCount").textContent = wishlistCount;
+
+        const wishlistItems = document.getElementById("wishlistItems");
+
+        if (wishlistCount === 0) {
+          wishlistItems.innerHTML = `
+            <div class="wishlist-empty">
+              <i class="fas fa-heart"></i>
+              <h3 class="text-xl font-semibold mb-2">Your wishlist is empty</h3>
+              <p class="text-gray-500">Add some products you love to your wishlist!</p>
+            </div>
+          `;
+        } else {
+          let wishlistHTML = "";
+          for (const id of Object.keys(wishlist)) {
+            let product =
+              bestSellerProducts.find((p) => p.id == id) ||
+              latestProducts.find((p) => p.id == id);
+            if (product) {
+              wishlistHTML += `
+              <div class="wishlist-item">
+                <div class="wishlist-item-image">
+                  <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="wishlist-item-details">
+                  <h4 class="wishlist-item-name">${product.name}</h4>
+                  <p class="wishlist-item-price">$${product.discountPrice.toFixed(
+                    2
+                  )}</p>
+                  <div class="wishlist-item-controls">
+                    <button class="checkout-btn" onclick="addToCartFromWishlist(${
+                      product.id
+                    })">
+                      <i class="fas fa-cart-plus"></i>
+                      Add to Cart
+                    </button>
+                    <button class="wishlist-item-remove" onclick="removeFromWishlist(${
+                      product.id
+                    })">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+            }
+          }
+          wishlistItems.innerHTML = wishlistHTML;
+        }
+      }
+
+      function removeFromCart(productId) {
+        delete cart[productId];
+        updateCartUI();
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+      }
+
+      function removeFromWishlist(productId) {
+        delete wishlist[productId];
+        updateWishlistUI();
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+      }
+
+      function addToCartFromWishlist(productId) {
+        cart[productId] = (cart[productId] || 0) + 1;
+        updateCartUI();
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+      }
+
+      function initializeCarousel(carouselId, prevButtonId, nextButtonId) {
+        const carousel = document.getElementById(carouselId);
+        const nextBtn = document.getElementById(nextButtonId);
+        const prevBtn = document.getElementById(prevButtonId);
+        let autoScrollInterval;
+
+        function getCardWidth() {
+          const card = carousel.querySelector(".product-card");
+          if (!card) return 200;
+          const style = window.getComputedStyle(card);
+          const margin =
+            parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+          return card.offsetWidth + margin;
+        }
+
+        function snapToNearestCard() {
+          const cardWidth = getCardWidth();
+          const scrollPosition = carousel.scrollLeft;
+          const nearestCardIndex = Math.round(scrollPosition / cardWidth);
+          carousel.scrollTo({
+            left: nearestCardIndex * cardWidth,
+            behavior: "smooth",
+          });
+        }
+
+        function startAutoScroll() {
+          autoScrollInterval = setInterval(() => {
+            const cardWidth = getCardWidth();
+            const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+            if (carousel.scrollLeft >= maxScroll) {
+              carousel.scrollTo({ left: 0, behavior: "smooth" });
+            } else {
+              carousel.scrollBy({ left: cardWidth, behavior: "smooth" });
+            }
+          }, 3000);
+        }
+
+        function stopAutoScroll() {
+          clearInterval(autoScrollInterval);
+        }
+
+        nextBtn.addEventListener("click", () => {
+          stopAutoScroll();
+          const cardWidth = getCardWidth();
+          carousel.scrollBy({
+            left: cardWidth,
+            behavior: "smooth",
+          });
+          startAutoScroll();
+        });
+
+        prevBtn.addEventListener("click", () => {
+          stopAutoScroll();
+          const cardWidth = getCardWidth();
+          carousel.scrollBy({
+            left: -cardWidth,
+            behavior: "smooth",
+          });
+          startAutoScroll();
+        });
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        carousel.addEventListener("mousedown", (e) => {
+          isDown = true;
+          carousel.classList.add("grabbing");
+          startX = e.pageX - carousel.offsetLeft;
+          scrollLeft = carousel.scrollLeft;
+          carousel.style.scrollBehavior = "auto";
+          stopAutoScroll();
+        });
+
+        carousel.addEventListener("mouseleave", () => {
+          if (isDown) {
+            isDown = false;
+            carousel.classList.remove("grabbing");
+            snapToNearestCard();
+            carousel.style.scrollBehavior = "smooth";
+            startAutoScroll();
+          }
+        });
+
+        carousel.addEventListener("mouseup", () => {
+          if (isDown) {
+            isDown = false;
+            carousel.classList.remove("grabbing");
+            snapToNearestCard();
+            carousel.style.scrollBehavior = "smooth";
+            startAutoScroll();
+          }
+        });
+
+        carousel.addEventListener("mousemove", (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - carousel.offsetLeft;
+          const walk = (x - startX) * 1.5;
+          carousel.scrollLeft = scrollLeft - walk;
+        });
+
+        carousel.addEventListener("touchstart", (e) => {
+          startX = e.touches[0].pageX - carousel.offsetLeft;
+          scrollLeft = carousel.scrollLeft;
+          carousel.style.scrollBehavior = "auto";
+          stopAutoScroll();
+        });
+
+        carousel.addEventListener("touchmove", (e) => {
+          const x = e.touches[0].pageX - carousel.offsetLeft;
+          const walk = (x - startX) * 1.5;
+          carousel.scrollLeft = scrollLeft - walk;
+        });
+
+        carousel.addEventListener("touchend", () => {
+          snapToNearestCard();
+          carousel.style.scrollBehavior = "smooth";
+          startAutoScroll();
+        });
+
+        carousel.addEventListener("mouseenter", stopAutoScroll);
+        carousel.addEventListener("mouseleave", startAutoScroll);
+
+        carousel.classList.add("cursor-grab");
+        startAutoScroll();
+      }
+
+      function initImageSlider() {
+        const slides = document.querySelectorAll(".slider-container .slide");
+        const indicators = document.querySelectorAll(".indicator");
+        const prevBtn = document.getElementById("sliderPrev");
+        const nextBtn = document.getElementById("sliderNext");
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+          slides.forEach((slide) => slide.classList.remove("active"));
+          indicators.forEach((indicator) =>
+            indicator.classList.remove("active")
+          );
+          slides[index].classList.add("active");
+          indicators[index].classList.add("active");
+          currentSlide = index;
+        }
+
+        function nextSlide() {
+          let next = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+          showSlide(next);
+        }
+
+        function prevSlide() {
+          let prev = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+          showSlide(prev);
+        }
+
+        function startSlideShow() {
+          slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopSlideShow() {
+          clearInterval(slideInterval);
+        }
+
+        nextBtn.addEventListener("click", () => {
+          stopSlideShow();
+          nextSlide();
+          startSlideShow();
+        });
+
+        prevBtn.addEventListener("click", () => {
+          stopSlideShow();
+          prevSlide();
+          startSlideShow();
+        });
+
+        indicators.forEach((indicator, index) => {
+          indicator.addEventListener("click", () => {
+            stopSlideShow();
+            showSlide(index);
+            startSlideShow();
+          });
+        });
+
+        startSlideShow();
+        const slider = document.querySelector(".slider-container");
+        slider.addEventListener("mouseenter", stopSlideShow);
+        slider.addEventListener("mouseleave", startSlideShow);
+      }
+
+      function initCartSidebar() {
+        const cartIcon = document.getElementById("cartIcon");
+        const cartSidebar = document.getElementById("cartSidebar");
+        const closeCart = document.getElementById("closeCart");
+        const overlay = document.getElementById("overlay");
+        const continueShopping = document.getElementById("continueShopping");
+
+        function openCart() {
+          cartSidebar.classList.add("open");
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeCartSidebar() {
+          cartSidebar.classList.remove("open");
+          overlay.classList.remove("active");
+          document.body.style.overflow = "auto";
+        }
+
+        cartIcon.addEventListener("click", openCart);
+        closeCart.addEventListener("click", closeCartSidebar);
+        overlay.addEventListener("click", closeCartSidebar);
+        continueShopping.addEventListener("click", closeCartSidebar);
+      }
+
+      function initWishlistSidebar() {
+        const wishlistIcon = document.getElementById("wishlistIcon");
+        const wishlistSidebar = document.getElementById("wishlistSidebar");
+        const closeWishlist = document.getElementById("closeWishlist");
+        const overlay = document.getElementById("overlay");
+        const continueShoppingWishlist = document.getElementById(
+          "continueShoppingWishlist"
+        );
+
+        function openWishlist() {
+          wishlistSidebar.classList.add("open");
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeWishlistSidebar() {
+          wishlistSidebar.classList.remove("open");
+          overlay.classList.remove("active");
+          document.body.style.overflow = "auto";
+        }
+
+        wishlistIcon.addEventListener("click", openWishlist);
+        closeWishlist.addEventListener("click", closeWishlistSidebar);
+        overlay.addEventListener("click", closeWishlistSidebar);
+        continueShoppingWishlist.addEventListener(
+          "click",
+          closeWishlistSidebar
+        );
+      }
+
+      function init() {
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+        updateCartUI();
+        updateWishlistUI();
+        initializeCarousel(
+          "bestSellerCarousel",
+          "bestSellerPrev",
+          "bestSellerNext"
+        );
+        initializeCarousel(
+          "latestProductsCarousel",
+          "latestProductsPrev",
+          "latestProductsNext"
+        );
+        initImageSlider();
+        initCartSidebar();
+        initWishlistSidebar();
+      }
+
+      document.addEventListener("DOMContentLoaded", init);
+
+      document.querySelectorAll(".category-card").forEach((card) => {
+        card.addEventListener("click", function () {
+          const categoryName = this.querySelector("h3").textContent;
+          console.log(`Clicked on ${categoryName} category`);
+        });
+      });
+    </script>
+  </body>
+</html>

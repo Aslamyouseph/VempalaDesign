@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ocean's Finest - Premium Seafood</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      * {
+        font-family: "Poppins", sans-serif;
+      }
+
+      :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --text-primary: #2d3748;
+        --text-secondary: #4a5568;
+        --bg-glass: rgba(252, 252, 252, 0.181);
+        --primary-bg: #ffffff;
+        --navbar-bg: #f7f5f7;
+        --dropdown-bg: #ff048e;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f0f9ff 0%, #cbebff 100%);
+        color: #2d3748;
+        min-height: 100vh;
+      }
+
+      .navbar-glass {
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .gradient-text {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .nav-item {
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-item::before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 3px;
+        bottom: -8px;
+        left: 50%;
+        background: var(--accent-gradient);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 2px;
+        transform: translateX(-50%);
+      }
+
+      .nav-item:hover::before {
+        width: 100%;
+      }
+
+      .nav-item:hover {
+        transform: translateY(-2px);
+        color: #4facfe;
+      }
+
+      .dropdown-menu {
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .dropdown:hover .dropdown-menu,
+      .dropdown.open .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .dropdown-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(79, 172, 254, 0.1),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .dropdown-item:hover::before {
+        left: 100%;
+      }
+
+      .dropdown-item:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(79, 172, 254, 0.1),
+          rgba(0, 242, 254, 0.1)
+        );
+        color: #4facfe;
+        transform: translateX(5px);
+      }
+
+      .scroll-container {
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .product-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+
+      .quantity-counter {
+        animation: pulse 0.5s ease-in-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .slide-in {
+        animation: slideIn 0.4s ease-out;
+      }
+
+      .btn-bounce:active {
+        animation: bounce 0.3s ease-in-out;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+      }
+
+      .price-tag {
+        background: linear-gradient(45deg, #1e40af, #3b82f6);
+      }
+
+      .add-btn {
+        background: linear-gradient(45deg, #1e40af, #3b82f6);
+      }
+
+      .remove-btn {
+        background: linear-gradient(45deg, #ef4444, #f87171);
+      }
+
+      .nav-btn {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0.7)
+        );
+        backdrop-filter: blur(10px);
+      }
+
+      .testimonial-card {
+        background: rgba(255, 255, 255, 0.9);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .star {
+        color: #ffd700;
+      }
+
+      @keyframes fadeInDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fadeInDown {
+        animation: fadeInDown 0.25s ease forwards;
+      }
+
+      /* Mobile Responsive Styles */
+      @media (max-width: 768px) {
+        .navbar-glass {
+          padding: 1rem;
+        }
+
+        .desktop-only {
+          display: none !important;
+        }
+
+        .mobile-menu-btn {
+          display: block !important;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .category-nav {
+          display: none !important;
+        }
+      }
+
+      @media (min-width: 901px) {
+        .mobile-menu-btn {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .product-card {
+          min-width: 280px;
+        }
+
+        .hero-content {
+          text-align: center;
+        }
+
+        .hero-buttons {
+          justify-content: center;
+        }
+      }
+
+      @media (min-width: 641px) and (max-width: 768px) {
+        .product-card {
+          min-width: 300px;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .product-card {
+          min-width: 320px;
+        }
+      }
+
+      /* Mobile menu styles */
+      .mobile-menu {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .mobile-menu.open {
+        transform: translateX(0);
+      }
+
+      .overlay {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header with Cart -->
+    <nav
+      class="sticky top-0 z-50 bg-[var(--navbar-bg)] border-b border-gray-200 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto flex items-center gap-4 md:gap-6 p-4 md:px-6"
+      >
+        <!-- Mobile menu button -->
+        <button
+          class="mobile-menu-btn md:hidden text-gray-700"
+          onclick="toggleMobileMenu()"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            ></path>
+          </svg>
+        </button>
+
+        <!-- Logo -->
+        <a
+          href="#"
+          class="flex items-center font-bold text-xl md:text-2xl text-pink-600 hover:text-pink-700 transition-colors duration-300 shrink-0"
+          aria-label="Vempala Home"
+        >
+          <div
+            class="w-8 h-8 md:w-9 md:h-9 mr-2 rounded-lg flex items-center justify-center bg-gradient-to-br from-pink-600 to-pink-400 shadow-md font-extrabold text-white text-lg"
+          >
+            V
+          </div>
+          Vempala
+        </a>
+
+        <!-- Search -->
+        <div class="relative flex-1 min-w-[120px] max-w-xl mx-2 md:mx-4">
+          <input
+            type="search"
+            placeholder="Search for any product"
+            aria-label="Search products"
+            class="w-full rounded-xl border border-gray-300 px-4 md:px-5 py-2 md:py-3 pr-10 md:pr-12 text-sm placeholder-gray-400 shadow-inner focus:border-pink-600 focus:ring-2 focus:ring-pink-400 outline-none transition"
+          />
+          <button
+            class="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 p-1 md:p-2 rounded-full hover:bg-pink-100 transition"
+            aria-label="Search"
+          >
+            <svg
+              class="w-4 h-4 md:w-5 md:h-5 text-gray-600 group-hover:text-pink-600"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4 md:gap-7">
+          <!-- Profile -->
+          <div
+            class="profile relative flex items-center gap-1 text-gray-700 font-semibold text-sm px-3 py-1 md:px-4 md:py-2 rounded-md cursor-pointer hover:bg-pink-50 hover:text-pink-600 transition"
+            onclick="toggleProfileDropdown()"
+            role="button"
+            tabindex="0"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="profile-dropdown"
+            onkeydown="if(event.key==='Enter' || event.key===' ') toggleProfileDropdown()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              />
+            </svg>
+            <span class="hidden md:inline">Profile</span>
+
+            <!-- Dropdown Menu -->
+            <div
+              id="profile-dropdown"
+              role="menu"
+              class="absolute top-full right-0 mt-2 hidden flex-col bg-white border border-gray-200 rounded-xl shadow-lg min-w-[180px] overflow-hidden z-50"
+            >
+              <a
+                href="#"
+                role="menuitem"
+                tabindex="-1"
+                class="flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 12H3m12 0l-4-4m4 4l-4 4m10-8v8a2 2 0 01-2 2h-4"
+                  />
+                </svg>
+                Sign In
+              </a>
+              <a
+                href="#"
+                role="menuitem"
+                tabindex="-1"
+                class="flex items-center gap-2 px-5 py-3 text-sm font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z" />
+                </svg>
+                Orders
+              </a>
+            </div>
+          </div>
+
+          <!-- Cart -->
+          <div class="relative">
+            <button
+              id="cartButton"
+              class="flex items-center gap-2 md:gap-3 px-3 py-1 md:px-4 md:py-2 bg-pink-600 text-white rounded-lg shadow-md font-semibold text-sm hover:bg-pink-700 transition"
+              aria-label="View cart"
+              onclick="toggleCartDropdown()"
+            >
+              <svg
+                class="w-4 h-4 md:w-5 md:h-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                />
+              </svg>
+              <div class="flex flex-col items-start leading-tight">
+                <span class="text-xs opacity-90"
+                  ><span id="cartCount">0</span> items</span
+                >
+                <span class="font-bold text-sm md:text-base"
+                  >₹<span id="cartTotal">0</span></span
+                >
+              </div>
+            </button>
+
+            <!-- Cart Dropdown -->
+            <div
+              id="cartDropdown"
+              class="hidden absolute right-0 mt-2 w-72 sm:w-96 bg-white rounded-lg shadow-xl z-50 p-4"
+            >
+              <h3 class="font-bold text-lg mb-3">Your Cart</h3>
+              <div id="cartItems" class="max-h-60 overflow-y-auto">
+                <p class="text-gray-500 text-center py-4">Your cart is empty</p>
+              </div>
+              <div class="border-t mt-4 pt-4">
+                <div class="flex justify-between font-bold">
+                  <span>Total:</span>
+                  <span id="totalPrice">₹0.00</span>
+                </div>
+                <button
+                  class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+                >
+                  Checkout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div
+      class="overlay fixed inset-0 bg-black bg-opacity-50 z-40"
+      onclick="toggleMobileMenu()"
+    ></div>
+    <div
+      class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-4"
+    >
+      <button
+        class="absolute top-4 right-4 text-gray-700"
+        onclick="toggleMobileMenu()"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+
+      <div class="mt-8">
+        <h3 class="font-bold text-lg mb-4">Categories</h3>
+        <div class="space-y-2">
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Frozen Fish</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Ready To Cook</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Pickle</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Poultry & Meat</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Fresh Products</a
+          >
+        </div>
+
+        <div class="mt-8 border-t pt-4">
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >My Account</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Orders</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Wishlist</a
+          >
+          <a href="#" class="block py-2 px-4 rounded hover:bg-gray-100"
+            >Settings</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Navigation -->
+    <nav
+      class="navbar-glass category-nav sticky top-14 md:top-0 z-40 transition-all duration-300"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-center items-center h-12 md:h-16">
+          <!-- Desktop Menu -->
+          <div class="flex items-center space-x-1  bg-gray-300">
+            <!-- Frozen Fish Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center space-x-1 px-3 py-1 md:px-4 md:py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-snowflake text-sm"></i>
+                <span class="text-sm md:text-base">Frozen Fish</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+              >
+                <div class="p-2 bg-gray-50">
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Frozen King Fish</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-shrimp text-pink-500"></i>
+                    <span>Frozen Shrimp</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-yellow-500"></i>
+                    <span>Frozen Mahi Mahi</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-orange-500"></i>
+                    <span>Frozen Yellowfin Fish</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-shrimp text-red-500"></i>
+                    <span>Frozen Black Tiger Prawns</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ready To Cook Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center space-x-1 px-3 py-1 md:px-4 md:py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-utensils text-sm"></i>
+                <span class="text-sm md:text-base">Ready To Cook</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+              >
+                <div class="p-2  bg-gray-50">
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-seedling text-green-500"></i>
+                    <span>Vegetable Samosa</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-leaf text-green-600"></i>
+                    <span>Vegetable Spring Roll</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Fish Finger</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-drumstick-bite text-red-500"></i>
+                    <span>Meat Cutlet</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-shrimp text-pink-500"></i>
+                    <span>Butterfly Prawns</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pickle Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center space-x-1 px-3 py-1 md:px-4 md:py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-pepper-hot text-sm"></i>
+                <span class="text-sm md:text-base">Pickle</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+              >
+                <div class="p-2  bg-gray-50">
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Tuna Pickle</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-shrimp text-pink-500"></i>
+                    <span>Prawns Pickle</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-drumstick-bite text-red-500"></i>
+                    <span>Meat Pickle</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-calendar-alt text-amber-500"></i>
+                    <span>Date Pickle</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Poultry & Meat Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center space-x-1 px-3 py-1 md:px-4 md:py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-drumstick-bite text-sm"></i>
+                <span class="text-sm md:text-base">Poultry & Meat</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+              >
+                <div class="p-2  bg-gray-50">
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-cow text-amber-600"></i>
+                    <span>Frozen Buffalo</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-sheep text-gray-600"></i>
+                    <span>Frozen Mutton / Goat</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fresh Products Dropdown -->
+            <div class="relative dropdown group">
+              <button
+                class="nav-item flex items-center space-x-1 px-3 py-1 md:px-4 md:py-2 rounded-lg font-medium text-gray-700 hover:text-blue-500 dropdown-btn"
+              >
+                <i class="fas fa-leaf text-sm"></i>
+                <span class="text-sm md:text-base">Fresh Products</span>
+                <i
+                  class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"
+                ></i>
+              </button>
+              <div
+                class="dropdown-menu absolute left-0 mt-2 w-64 rounded-2xl overflow-hidden z-50"
+              >
+                <div class="p-2  bg-gray-50">
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-gray-700"></i>
+                    <span>Fresh Sword Fish</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-blue-500"></i>
+                    <span>Fresh King Fish</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-blue-600"></i>
+                    <span>Fresh Indian Mackerel</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-green-500"></i>
+                    <span>Fresh Anchovy Large</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="dropdown-item flex items-center space-x-3 p-3 rounded-xl"
+                  >
+                    <i class="fas fa-fish text-red-500"></i>
+                    <span>Fresh Red Snapper</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Image Slider -->
+    <div
+      class="relative w-full max-w-[1300px] mx-auto my-6 md:my-10 overflow-hidden bg-black shadow-2xl rounded-lg"
+    >
+      <!-- Slides -->
+      <div
+        class="slide relative inset-0 opacity-100 z-10 transition-all duration-700 ease-in-out"
+      >
+        <img
+          src="./Image/ImageSlider1.jpg"
+          alt="Fresh Seafood Selection"
+          class="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-6 left-6 sm:left-10 text-white max-w-xs sm:max-w-md"
+        >
+          <h2 class="text-xl sm:text-2xl md:text-4xl font-extrabold mb-2">
+            Fresh Seafood Selection
+          </h2>
+          <p class="text-xs sm:text-sm md:text-lg opacity-90 mb-4">
+            Premium quality seafood delivered to your doorstep
+          </p>
+          <button
+            class="px-4 py-2 sm:px-6 sm:py-3 font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 shadow-lg hover:scale-105 transition transform text-sm md:text-base"
+          >
+            Shop Now
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="slide absolute inset-0 opacity-0 z-0 transition-all duration-700 ease-in-out"
+      >
+        <img
+          src="./Image/ImageSlider2.jpg"
+          alt="Ready to Cook Meals"
+          class="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-6 left-6 sm:left-10 text-white max-w-xs sm:max-w-md"
+        >
+          <h2 class="text-xl sm:text-2xl md:text-4xl font-extrabold mb-2">
+            Ready to Cook Meals
+          </h2>
+          <p class="text-xs sm:text-sm md:text-lg opacity-90 mb-4">
+            Delicious and convenient meal solutions
+          </p>
+          <button
+            class="px-4 py-2 sm:px-6 sm:py-3 font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 shadow-lg hover:scale-105 transition transform text-sm md:text-base"
+          >
+            Explore Now
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="slide absolute inset-0 opacity-0 z-0 transition-all duration-700 ease-in-out"
+      >
+        <img
+          src="./Image/ImageSlider4.jpg"
+          alt="Special Offers"
+          class="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+        ></div>
+        <div
+          class="absolute bottom-6 left-6 sm:left-10 text-white max-w-xs sm:max-w-md"
+        >
+          <h2 class="text-xl sm:text-2xl md:text-4xl font-extrabold mb-2">
+            Special Offers
+          </h2>
+          <p class="text-xs sm:text-sm md:text-lg opacity-90 mb-4">
+            Limited time discounts on premium products
+          </p>
+          <button
+            class="px-4 py-2 sm:px-6 sm:py-3 font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 shadow-lg hover:scale-105 transition transform text-sm md:text-base"
+          >
+            View Offers
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <button
+        id="prevBtn"
+        class="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 md:p-4 rounded-full shadow-lg hover:scale-110 transition z-20"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 md:w-7 md:h-7"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+
+      <button
+        id="nextBtn"
+        class="absolute top-1/2 right-2 md:right-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 md:p-4 rounded-full shadow-lg hover:scale-110 transition z-20"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 md:w-7 md:h-7"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+
+      <!-- Indicators -->
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        <div
+          class="indicator w-2 h-2 md:w-3 md:h-3 rounded-full bg-white/50 cursor-pointer transition-all"
+          data-index="0"
+        ></div>
+        <div
+          class="indicator w-2 h-2 md:w-3 md:h-3 rounded-full bg-white/50 cursor-pointer transition-all"
+          data-index="1"
+        ></div>
+        <div
+          class="indicator w-2 h-2 md:w-3 md:h-3 rounded-full bg-white/50 cursor-pointer transition-all"
+          data-index="2"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative py-8 sm:py-12 lg:py-16 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
+          <div class="lg:w-1/2 text-center lg:text-left hero-content">
+            <h1
+              class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 mb-4 sm:mb-6"
+            >
+              Premium <span class="gradient-text">Seafood</span> Delivered to
+              Your Door
+            </h1>
+            <p
+              class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0"
+            >
+              Experience the freshest catch from the ocean with our premium
+              selection of seafood products. From frozen fish to ready-to-cook
+              meals, we bring the ocean's bounty to your table.
+            </p>
+            <div
+              class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start hero-buttons"
+            >
+              <button
+                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full font-medium transition-colors text-sm sm:text-base"
+              >
+                Shop Now
+              </button>
+            </div>
+          </div>
+          <div class="lg:w-1/2 flex justify-center">
+            <div class="relative max-w-md sm:max-w-lg lg:max-w-xl">
+              <img
+                src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                alt="Fresh Seafood"
+                class="rounded-2xl shadow-2xl w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Best Seller Section -->
+    <section class="py-6 sm:py-10">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-center items-center mb-6">
+          <h2 class="text-xl sm:text-3xl font-bold text-gray-800">
+            Best Sellers
+          </h2>
+        </div>
+
+        <div class="relative">
+          <!-- Previous button -->
+          <button
+            id="bestSellerPrev"
+            class="absolute left-0 top-1/2 -translate-y-1/2 nav-btn rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:scale-110 transform transition duration-300 z-20 shadow-lg -ml-2 sm:-ml-4"
+          >
+            <svg
+              class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Card container -->
+          <div
+            id="bestSellerCarousel"
+            class="flex gap-4 sm:gap-6 overflow-x-hidden scroll-container px-8 sm:px-12 py-4"
+          >
+            <!-- Product Cards will be inserted here -->
+          </div>
+
+          <!-- Next button -->
+          <button
+            id="bestSellerNext"
+            class="absolute right-0 top-1/2 -translate-y-1/2 nav-btn rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:scale-110 transform transition duration-300 z-20 shadow-lg -mr-2 sm:-mr-4"
+          >
+            <svg
+              class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest Products Section -->
+    <section class="py-10 sm:py-14 bg-blue-50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-center items-center mb-6">
+          <h2 class="text-xl sm:text-3xl font-bold text-gray-800">
+            Latest Products
+          </h2>
+        </div>
+
+        <div class="relative">
+          <!-- Previous button -->
+          <button
+            id="latestProductsPrev"
+            class="absolute left-0 top-1/2 -translate-y-1/2 nav-btn rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:scale-110 transform transition duration-300 z-20 shadow-lg -ml-2 sm:-ml-4"
+          >
+            <svg
+              class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Card container -->
+          <div
+            id="latestProductsCarousel"
+            class="flex gap-4 sm:gap-6 overflow-x-hidden scroll-container px-8 sm:px-12 py-4"
+          >
+            <!-- Product Cards will be inserted here -->
+          </div>
+
+          <!-- Next button -->
+          <button
+            id="latestProductsNext"
+            class="absolute right-0 top-1/2 -translate-y-1/2 nav-btn rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:scale-110 transform transition duration-300 z-20 shadow-lg -mr-2 sm:-mr-4"
+          >
+            <svg
+              class="w-3 h-3 sm:w-4 sm:h-4 text-gray-700"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-12 sm:py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2
+          class="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800"
+        >
+          Why Choose Us
+        </h2>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+        >
+          <!-- Card 1: Wide Selection -->
+          <div
+            class="bg-gray-50 p-5 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i
+              class="fas fa-box-open text-3xl sm:text-4xl text-blue-500 mb-3 sm:mb-4"
+            ></i>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 text-gray-800">
+              Wide Selection
+            </h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              Discover thousands of products from top brands, all in one place.
+              We curate the best to meet your needs.
+            </p>
+          </div>
+          <!-- Card 2: Competitive Prices -->
+          <div
+            class="bg-gray-50 p-5 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i
+              class="fas fa-tags text-3xl sm:text-4xl text-green-500 mb-3 sm:mb-4"
+            ></i>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 text-gray-800">
+              Competitive Prices
+            </h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              Enjoy unbeatable deals and discounts. We ensure you get the best
+              value for your money every time.
+            </p>
+          </div>
+          <!-- Card 3: Fast Delivery -->
+          <div
+            class="bg-gray-50 p-5 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i
+              class="fas fa-shipping-fast text-3xl sm:text-4xl text-red-500 mb-3 sm:mb-4"
+            ></i>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 text-gray-800">
+              Fast Delivery
+            </h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              Get your orders delivered quickly and reliably. Same-day shipping
+              available in select areas.
+            </p>
+          </div>
+          <!-- Card 4: Excellent Customer Service -->
+          <div
+            class="bg-gray-50 p-5 sm:p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 text-center"
+          >
+            <i
+              class="fas fa-headset text-3xl sm:text-4xl text-purple-500 mb-3 sm:mb-4"
+            ></i>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2 text-gray-800">
+              Excellent Customer Service
+            </h3>
+            <p class="text-gray-600 text-sm sm:text-base">
+              Our support team is here 24/7 to assist you. Satisfaction
+              guaranteed with easy returns and refunds.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-white">
+      <div class="container mx-auto text-center">
+        <h2
+          class="text-2xl sm:text-3xl font-bold text-gray-800 mb-8 sm:mb-12 tracking-wide"
+        >
+          What Our Customers Say
+        </h2>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8"
+        >
+          <!-- Testimonial 1 -->
+          <div
+            class="testimonial-card rounded-xl shadow-md p-5 sm:p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="John Doe"
+              class="w-14 h-14 sm:w-16 sm:h-16 rounded-full mb-3 sm:mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3
+              class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2"
+            >
+              John Doe
+            </h3>
+            <p class="text-xs text-gray-500 mb-3 sm:mb-4">New York, USA</p>
+            <div class="flex mb-3 sm:mb-4">
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-600 italic">
+              "Absolutely love the quality of the products! The shipping was
+              super fast, and everything arrived in perfect condition."
+            </p>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div
+            class="testimonial-card rounded-xl shadow-md p-5 sm:p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="Jane Smith"
+              class="w-14 h-14 sm:w-16 sm:h-16 rounded-full mb-3 sm:mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3
+              class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2"
+            >
+              Jane Smith
+            </h3>
+            <p class="text-xs text-gray-500 mb-3 sm:mb-4">London, UK</p>
+            <div class="flex mb-3 sm:mb-4">
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-600 italic">
+              "Excellent customer service and a wide variety of options. I found
+              exactly what I was looking for, and the prices are unbeatable."
+            </p>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div
+            class="testimonial-card rounded-xl shadow-md p-5 sm:p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="Alice Johnson"
+              class="w-14 h-14 sm:w-16 sm:h-16 rounded-full mb-3 sm:mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3
+              class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2"
+            >
+              Alice Johnson
+            </h3>
+            <p class="text-xs text-gray-500 mb-3 sm:mb-4">Sydney, Australia</p>
+            <div class="flex mb-3 sm:mb-4">
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-600 italic">
+              "The user interface is so intuitive, and the checkout process was
+              seamless. Products are top-notch with eco-friendly packaging."
+            </p>
+          </div>
+
+          <!-- Testimonial 4 -->
+          <div
+            class="testimonial-card rounded-xl shadow-md p-5 sm:p-6 flex flex-col items-center text-center"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+              alt="Bob Brown"
+              class="w-14 h-14 sm:w-16 sm:h-16 rounded-full mb-3 sm:mb-4 border-4 border-blue-100 shadow-sm object-cover"
+            />
+            <h3
+              class="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2"
+            >
+              Bob Brown
+            </h3>
+            <p class="text-xs text-gray-500 mb-3 sm:mb-4">Toronto, Canada</p>
+            <div class="flex mb-3 sm:mb-4">
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+              <span class="star text-lg sm:text-xl">★</span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-600 italic">
+              "Great deals and reliable delivery. I've shopped here multiple
+              times and never been disappointed. Very customer-friendly."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-10 sm:py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
+          <!-- Brand Section -->
+          <div class="flex flex-col items-center md:items-start">
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
+              Ocean's Finest
+            </h2>
+            <p
+              class="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4 text-center md:text-left"
+            >
+              Bringing the freshest seafood to your doorstep with quality and
+              care.
+            </p>
+            <div class="flex gap-3 sm:gap-4">
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <svg
+                  class="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.14h-3v4h3v12h5v-12h3.85l.42-4z"
+                  />
+                </svg>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <svg
+                  class="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M23.94 4.66c-.87.39-1.8.65-2.77.77a4.84 4.84 0 002.12-2.67 9.7 9.7 0 01-3.07 1.17 4.84 4.84 0 00-8.24 4.41A13.74 13.74 0 011.67 3.15a4.84 4.84 0 001.5 6.46 4.82 4.82 0 01-2.19-.6v.06a4.84 4.84 0 003.88 4.74 4.84 4.84 0 01-2.18.08 4.84 4.84 0 004.52 3.36A9.72 9.72 0 01.96 19.54a13.7 13.7 0 007.43 2.18c8.92 0 13.8-7.39 13.8-13.8 0-.21 0-.42-.01-.63A9.86 9.86 0 0024 4.66z"
+                  />
+                </svg>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <svg
+                  class="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 4.41 3.58 8.06 8.25 8.85v-6.26h-2.48v-2.59h2.48v-1.97c0-2.45 1.49-3.78 3.66-3.78 1.04 0 1.93.08 2.19.11v2.54h-1.5c-1.18 0-1.41.56-1.41 1.38v1.81h2.82l-.37 2.59h-2.45v6.26c4.67-.79 8.25-4.44 8.25-8.85 0-5.5-4.46-9.96-9.96-9.96z"
+                  />
+                </svg>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <svg
+                  class="w-5 h-5 sm:w-6 sm:h-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M19.61 12.25c.02-.83-.67-1.53-1.5-1.53h-3.24v6.26h1.76v-2.26h1.48c.83 0 1.5-.67 1.5-1.5v-.97zm-1.5.97h-1.48v-1.76h1.48v1.76zM12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 5.5 4.46 9.96 9.96 9.96s9.96-4.46 9.96-9.96c0-5.5-4.46-9.96-9.96-9.96zm0 18.41c-4.67 0-8.46-3.79-8.46-8.46 0-4.67 3.79-8.46 8.46-8.46s8.46 3.79 8.46 8.46c0 4.67-3.79 8.46-8.46 8.46zM9.24 8.25H7.48v8.26h1.76v-8.26z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Shop Links -->
+          <div>
+            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+              Shop
+            </h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >All Products</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Fresh Fish</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Shellfish</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Frozen Seafood</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Special Offers</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support Links -->
+          <div>
+            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+              Support
+            </h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >FAQs</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Shipping & Returns</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Order Tracking</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-xs sm:text-sm transition"
+                  >Terms & Conditions</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact Info -->
+          <div>
+            <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+              Contact Us
+            </h3>
+            <p class="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4">
+              123 Ocean Avenue<br />
+              Seaside City, SC 12345
+            </p>
+            <p class="text-gray-400 text-xs sm:text-sm mb-2">
+              Phone: (123) 456-7890
+            </p>
+            <p class="text-gray-400 text-xs sm:text-sm">
+              Email: info@oceansfinest.com
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-800 text-center"
+        >
+          <p class="text-gray-400 text-xs sm:text-sm">
+            &copy; 2025 Ocean's Finest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Product data
+      const bestSellerProducts = [
+        {
+          id: 1,
+          name: "Fresh Atlantic Salmon",
+          price: 24.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+        },
+        {
+          id: 2,
+          name: "Alaskan King Crab",
+          price: 49.99,
+          image:
+            "https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+        {
+          id: 3,
+          name: "Wild Caught Tuna Steaks",
+          price: 29.99,
+          image:
+            "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+        },
+        {
+          id: 4,
+          name: "Jumbo Shrimp",
+          price: 19.99,
+          image:
+            "https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+        {
+          id: 5,
+          name: "Fresh Oysters",
+          price: 15.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+        {
+          id: 6,
+          name: "Sea Scallops",
+          price: 27.99,
+          image:
+            "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+      ];
+
+      const latestProducts = [
+        {
+          id: 7,
+          name: "Fresh Atlantic Salmon",
+          price: 24.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+        },
+        {
+          id: 8,
+          name: "Alaskan King Crab",
+          price: 49.99,
+          image:
+            "https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+        {
+          id: 9,
+          name: "Wild Caught Tuna Steaks",
+          price: 29.99,
+          image:
+            "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Fresh Fish",
+        },
+        {
+          id: 10,
+          name: "Jumbo Shrimp",
+          price: 19.99,
+          image:
+            "https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+        {
+          id: 11,
+          name: "Fresh Oysters",
+          price: 15.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+        {
+          id: 12,
+          name: "Sea Scallops",
+          price: 27.99,
+          image:
+            "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80",
+          category: "Shellfish",
+        },
+      ];
+
+      let cart = {};
+
+      // Function to create product card HTML
+      function createProductCard(product, index) {
+        return `
+                <div class="glass-effect rounded-2xl product-card flex-shrink-0 slide-in overflow-hidden" style="animation-delay: ${
+                  index * 0.1
+                }s; width: 280px;">
+                    <div class="relative overflow-hidden group">
+                        <img src="${product.image}" alt="${
+          product.name
+        }" class="w-full h-40 sm:h-48 object-cover group-hover:scale-110 transition duration-700" loading="lazy">
+                        <div class="absolute top-3 right-3 price-tag text-white px-2 py-1 rounded-full text-xs font-bold">
+                            $${product.price}
+                        </div>
+                        <div class="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <span class="text-xs text-blue-600 font-medium bg-blue-100 px-2 py-1 rounded-full">${
+                          product.category
+                        }</span>
+                        <h3 class="font-bold text-sm text-gray-800 mb-3 mt-2 leading-tight line-clamp-2">${
+                          product.name
+                        }</h3>
+                        
+                        <div class="flex items-center justify-between mb-4 text-xs">
+                            <div class="flex items-center gap-1">
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-yellow-400">★</span>
+                                <span class="text-gray-300">★</span>
+                                <span class="text-xs text-gray-500 ml-1">(4.0)</span>
+                            </div>
+                            <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">In Stock</span>
+                        </div>
+                        
+                        <div class="flex items-center justify-center">
+                            ${
+                              cart[product.id]
+                                ? `
+                                <div class="flex items-center gap-2">
+                                    <button onclick="updateQuantity(${
+                                      product.id
+                                    }, -1)" class="remove-btn text-white rounded-full w-8 h-8 flex items-center justify-center hover:scale-110 transform transition duration-200 btn-bounce shadow-md">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                        </svg>
+                                    </button>
+                                    <span class="font-bold text-sm quantity-counter bg-gray-100 px-3 py-2 rounded-full min-w-[2rem] text-center">${
+                                      cart[product.id]
+                                    }</span>
+                                    <button onclick="updateQuantity(${
+                                      product.id
+                                    }, 1)" class="add-btn text-white rounded-full w-8 h-8 flex items-center justify-center hover:scale-110 transform transition duration-200 btn-bounce shadow-md">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            `
+                                : `
+                                <button onclick="addToCart(${product.id})" class="add-btn text-white font-semibold py-2 px-4 rounded-full hover:scale-105 transform transition duration-300 shadow-lg flex items-center gap-2 text-xs">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L5 3H3m4 10v6a1 1 0 001 1h6a1 1 0 001-1v-6m-10 0h10"></path>
+                                    </svg>
+                                    Add to Cart
+                                </button>
+                            `
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      // Function to render products in a carousel
+      function renderProducts(carouselId, products) {
+        const carousel = document.getElementById(carouselId);
+        carousel.innerHTML = products
+          .map((product, index) => createProductCard(product, index))
+          .join("");
+      }
+
+      // Add to cart function
+      function addToCart(productId) {
+        cart[productId] = (cart[productId] || 0) + 1;
+        updateCartUI();
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+      }
+
+      // Update quantity function
+      function updateQuantity(productId, change) {
+        if (cart[productId]) {
+          cart[productId] += change;
+          if (cart[productId] <= 0) {
+            delete cart[productId];
+          }
+          updateCartUI();
+          renderProducts("bestSellerCarousel", bestSellerProducts);
+          renderProducts("latestProductsCarousel", latestProducts);
+        }
+      }
+
+      // Update cart UI function
+      function updateCartUI() {
+        const cartCount = Object.values(cart).reduce(
+          (sum, qty) => sum + qty,
+          0
+        );
+        const totalPrice = Object.entries(cart).reduce((sum, [id, qty]) => {
+          let product =
+            bestSellerProducts.find((p) => p.id == id) ||
+            latestProducts.find((p) => p.id == id);
+          return sum + (product ? product.price * qty : 0);
+        }, 0);
+
+        document.getElementById("cartCount").textContent = cartCount;
+        document.getElementById("cartTotal").textContent =
+          totalPrice.toFixed(2);
+        document.getElementById(
+          "totalPrice"
+        ).textContent = `₹${totalPrice.toFixed(2)}`;
+
+        // Update cart items in dropdown
+        const cartItems = document.getElementById("cartItems");
+        if (cartCount === 0) {
+          cartItems.innerHTML =
+            '<p class="text-gray-500 text-center py-4">Your cart is empty</p>';
+        } else {
+          let cartHTML = "";
+          for (const [id, qty] of Object.entries(cart)) {
+            let product =
+              bestSellerProducts.find((p) => p.id == id) ||
+              latestProducts.find((p) => p.id == id);
+            if (product) {
+              cartHTML += `
+                            <div class="flex items-center justify-between py-2 border-b">
+                                <div class="flex items-center">
+                                    <img src="${product.image}" alt="${
+                product.name
+              }" class="w-10 h-10 object-cover rounded">
+                                    <div class="ml-3">
+                                        <p class="text-sm font-medium">${
+                                          product.name
+                                        }</p>
+                                        <p class="text-xs text-gray-500">Qty: ${qty}</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm font-medium">$${(
+                                  product.price * qty
+                                ).toFixed(2)}</p>
+                            </div>
+                        `;
+            }
+          }
+          cartItems.innerHTML = cartHTML;
+        }
+      }
+
+      // Initialize carousels
+      function initializeCarousel(carouselId, prevButtonId, nextButtonId) {
+        const carousel = document.getElementById(carouselId);
+        const nextBtn = document.getElementById(nextButtonId);
+        const prevBtn = document.getElementById(prevButtonId);
+
+        function getCardWidth() {
+          if (window.innerWidth < 641) return 295;
+          if (window.innerWidth < 769) return 315;
+          return 335;
+        }
+
+        nextBtn.addEventListener("click", () => {
+          carousel.scrollLeft += getCardWidth();
+        });
+
+        prevBtn.addEventListener("click", () => {
+          carousel.scrollLeft -= getCardWidth();
+        });
+
+        // Touch/swipe support
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        carousel.addEventListener("mousedown", (e) => {
+          isDown = true;
+          carousel.style.cursor = "grabbing";
+          startX = e.pageX - carousel.offsetLeft;
+          scrollLeft = carousel.scrollLeft;
+        });
+
+        carousel.addEventListener("mouseleave", () => {
+          isDown = false;
+          carousel.style.cursor = "grab";
+        });
+
+        carousel.addEventListener("mouseup", () => {
+          isDown = false;
+          carousel.style.cursor = "grab";
+        });
+
+        carousel.addEventListener("mousemove", (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - carousel.offsetLeft;
+          const walk = (x - startX) * 2;
+          carousel.scrollLeft = scrollLeft - walk;
+        });
+
+        // Touch events for mobile
+        carousel.addEventListener("touchstart", (e) => {
+          startX = e.touches[0].pageX - carousel.offsetLeft;
+          scrollLeft = carousel.scrollLeft;
+        });
+
+        carousel.addEventListener("touchmove", (e) => {
+          const x = e.touches[0].pageX - carousel.offsetLeft;
+          const walk = (x - startX) * 2;
+          carousel.scrollLeft = scrollLeft - walk;
+        });
+
+        // Set cursor style
+        carousel.style.cursor = "grab";
+      }
+
+      // Toggle cart dropdown
+      function toggleCartDropdown() {
+        const dropdown = document.getElementById("cartDropdown");
+        dropdown.classList.toggle("hidden");
+      }
+
+      // Close cart dropdown when clicking outside
+      document.addEventListener("click", function (event) {
+        const cartButton = document.getElementById("cartButton");
+        const cartDropdown = document.getElementById("cartDropdown");
+
+        if (
+          !cartButton.contains(event.target) &&
+          !cartDropdown.contains(event.target)
+        ) {
+          cartDropdown.classList.add("hidden");
+        }
+      });
+
+      // Toggle mobile menu
+      function toggleMobileMenu() {
+        document.querySelector(".mobile-menu").classList.toggle("open");
+        document.querySelector(".overlay").classList.toggle("open");
+        document.body.classList.toggle("overflow-hidden");
+      }
+
+      // Toggle profile dropdown
+      function toggleProfileDropdown() {
+        const dropdown = document.getElementById("profile-dropdown");
+        const expanded =
+          document.querySelector(".profile").getAttribute("aria-expanded") ===
+          "true"
+            ? "false"
+            : "true";
+        document
+          .querySelector(".profile")
+          .setAttribute("aria-expanded", expanded);
+        dropdown.classList.toggle("hidden");
+        dropdown.classList.toggle("flex");
+        dropdown.classList.toggle("animate-fadeInDown");
+      }
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function (e) {
+        const profile = document.querySelector(".profile");
+        const dropdown = document.getElementById("profile-dropdown");
+        if (!profile.contains(e.target)) {
+          profile.setAttribute("aria-expanded", "false");
+          dropdown.classList.add("hidden");
+          dropdown.classList.remove("flex");
+        }
+      });
+
+      // Image slider functionality
+      function initSlider() {
+        const slides = document.querySelectorAll(".slide");
+        const indicators = document.querySelectorAll(".indicator");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        let currentSlide = 0;
+
+        function showSlide(index) {
+          slides.forEach((slide, i) => {
+            slide.classList.toggle("opacity-100", i === index);
+            slide.classList.toggle("z-10", i === index);
+            slide.classList.toggle("opacity-0", i !== index);
+            slide.classList.toggle("z-0", i !== index);
+            indicators[i].classList.toggle("bg-blue-600", i === index);
+            indicators[i].classList.toggle("w-3", i === index);
+            indicators[i].classList.toggle("h-3", i === index);
+            indicators[i].classList.toggle("bg-white/50", i !== index);
+          });
+          currentSlide = index;
+        }
+
+        function nextSlide() {
+          let next = currentSlide === slides.length - 1 ? 0 : currentSlide + 1;
+          showSlide(next);
+        }
+
+        function prevSlide() {
+          let prev = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+          showSlide(prev);
+        }
+
+        indicators.forEach((indicator) => {
+          indicator.addEventListener("click", () => {
+            showSlide(parseInt(indicator.getAttribute("data-index")));
+          });
+        });
+
+        nextBtn.addEventListener("click", nextSlide);
+        prevBtn.addEventListener("click", prevSlide);
+
+        setInterval(nextSlide, 5000);
+      }
+
+      // Navbar scroll effect
+      function initNavbarScroll() {
+        let lastScrollTop = 0;
+        const navbar = document.querySelector("nav");
+
+        window.addEventListener("scroll", () => {
+          const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+
+          if (scrollTop > lastScrollTop && scrollTop > 100) {
+            navbar.style.transform = "translateY(-100%)";
+          } else {
+            navbar.style.transform = "translateY(0)";
+          }
+
+          if (scrollTop > 50) {
+            navbar.classList.add("shadow-lg");
+          } else {
+            navbar.classList.remove("shadow-lg");
+          }
+
+          lastScrollTop = scrollTop;
+        });
+      }
+
+      // Initialize the page
+      function init() {
+        renderProducts("bestSellerCarousel", bestSellerProducts);
+        renderProducts("latestProductsCarousel", latestProducts);
+        updateCartUI();
+
+        initializeCarousel(
+          "bestSellerCarousel",
+          "bestSellerPrev",
+          "bestSellerNext"
+        );
+        initializeCarousel(
+          "latestProductsCarousel",
+          "latestProductsPrev",
+          "latestProductsNext"
+        );
+
+        initSlider();
+        initNavbarScroll();
+      }
+
+      // Run initialization when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>

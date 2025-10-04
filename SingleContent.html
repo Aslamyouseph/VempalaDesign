@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chicken Curry Cut - Small Pieces | Licious</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Helvetica", "Arial", sans-serif;
+      }
+
+      .tab-active {
+        border-bottom: 3px solid #dc2626;
+        color: #000;
+      }
+      .tab-inactive {
+        color: #9ca3af;
+      }
+      .check-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .check-green {
+        background-color: #dcfce7;
+      }
+      .check-gray {
+        background-color: #f3f4f6;
+      }
+
+      .carousel-dots {
+        position: absolute;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+      }
+      .carousel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .carousel-dot.active {
+        background: white;
+        width: 24px;
+        border-radius: 4px;
+      }
+      .quantity-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: white;
+      }
+      .quantity-btn:hover {
+        background: #f3f4f6;
+      }
+      .quantity-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .icon-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 0;
+      }
+      .icon-box svg {
+        width: 20px;
+        height: 20px;
+        fill: #4b5563;
+      }
+
+      .scroll-container {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .product-image-container {
+        position: relative;
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+      }
+      .product-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .product-content {
+        padding: 12px;
+      }
+      .product-name {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
+        color: #1f2937;
+      }
+      .product-details {
+        font-size: 11px;
+        color: #6b7280;
+        margin-bottom: 8px;
+      }
+      .product-pricing {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+      }
+      .product-discount-price {
+        font-weight: 700;
+        font-size: 16px;
+        color: #1f2937;
+      }
+      .product-original-price {
+        font-size: 12px;
+        color: #9ca3af;
+        text-decoration: line-through;
+      }
+      .product-discount-percent {
+        font-size: 11px;
+        font-weight: 600;
+        color: #059669;
+        background: #d1fae5;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      .product-offer {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        color: #f50b0b;
+      }
+
+      .product-card .quantity-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+        background: rgb(255, 255, 255);
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .product-card .quantity-btn:hover {
+        background: #f3f4f6;
+      }
+      .product-card .quantity-count {
+        font-weight: 600;
+        font-size: 12px;
+        min-width: 20px;
+        text-align: center;
+      }
+
+      .add-to-cart-btn {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .add-to-cart-btn:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+      }
+
+      /* Modal styles */
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 0;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 900px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .video-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+      }
+
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        cursor: pointer;
+        color: white;
+        background-color: rgba(220, 38, 38, 0.9);
+        border-radius: 50%;
+        z-index: 10;
+        transition: all 0.3s;
+        border: 2px solid white;
+      }
+
+      .close-modal:hover {
+        background-color: #dc2626;
+        transform: scale(1.1);
+      }
+
+      @media (max-width: 640px) {
+        .modal {
+          padding: 12px;
+        }
+
+        .modal-content {
+          border-radius: 8px;
+        }
+
+        .close-modal {
+          width: 32px;
+          height: 32px;
+          font-size: 18px;
+          top: 6px;
+          right: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto px-2 py-4 md:py-8">
+      <div class="grid md:grid-cols-2 gap-6 md:gap-12">
+        <!-- Left Column - Image Carousel -->
+        <div class="relative">
+          <div class="rounded-2xl overflow-hidden bg-gray-100 relative">
+            <div id="imageCarousel" class="relative">
+              <img
+                id="mainImage"
+                src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=800&h=600&fit=crop"
+                alt="Chicken Curry Cut"
+                class="w-full h-auto"
+              />
+            </div>
+
+            <button
+              id="prevImage"
+              class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition"
+            >
+              <i class="fas fa-chevron-left text-gray-700"></i>
+            </button>
+            <button
+              id="nextImage"
+              class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition"
+            >
+              <i class="fas fa-chevron-right text-gray-700"></i>
+            </button>
+
+            <!-- Carousel Dots -->
+            <div class="carousel-dots" id="carouselDots"></div>
+          </div>
+        </div>
+
+        <!-- Right Column - Product Details -->
+        <div class="flex flex-col">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            Chicken Curry Cut - Small Pieces
+          </h1>
+          <p class="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">
+            Bone-in | Small Cuts | Curry Cut
+          </p>
+
+          <!-- Product Info Icons -->
+          <div
+            class="flex gap-4 md:gap-8 mb-3 md:mb-1 pb-2 md:pb-6 border-b border-gray-200 flex-wrap"
+          >
+            <div class="icon-box">
+              <i class="fas fa-weight text-gray-700"></i>
+              <span class="text-sm font-medium text-gray-700">500 g</span>
+            </div>
+            <div class="icon-box">
+              <i class="fas fa-layer-group text-gray-700"></i>
+              <span class="text-sm font-medium text-gray-700"
+                >12-18 Pieces</span
+              >
+            </div>
+            <div class="icon-box">
+              <i class="fas fa-users text-gray-700"></i>
+              <span class="text-sm font-medium text-gray-700">Serves 4</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4 md:mb-6">
+            <p
+              id="description"
+              class="text-gray-700 leading-relaxed mb-2 text-sm md:text-base"
+            >
+              Licious Chicken Curry Cut is a premium cut that includes the leg,
+              breast & wings. This smaller, tender cut has equal-sized pieces
+              for uniform cooking and the juiciest bites.
+            </p>
+            <button
+              id="readMoreBtn"
+              class="text-red-600 font-medium text-sm hover:underline"
+            >
+              Read more
+            </button>
+          </div>
+
+          <!-- Price Section -->
+          <div class="mb-4 md:mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-baseline gap-3">
+                <span class="text-2xl md:text-3xl font-bold text-gray-900"
+                  >₹<span id="totalPrice">160</span></span
+                >
+                <span
+                  class="text-sm font-semibold text-green-600 bg-green-50 px-2 py-1 rounded"
+                  >17% off</span
+                >
+              </div>
+              <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+            <p class="text-sm text-gray-500">
+              MRP: <span class="line-through">₹193</span> (incl. of all taxes)
+            </p>
+          </div>
+
+          <!-- Safety Badge and Delivery -->
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <button
+              id="safetyVideoBtn"
+              class="flex items-center gap-2 cursor-pointer"
+            >
+              <i class="fas fa-shield-alt text-red-600"></i>
+              <span class="text-red-600 font-semibold text-sm"
+                >Only the Safest Chicken!</span
+              >
+            </button>
+            <div class="flex items-center gap-2">
+              <i class="fas fa-bolt text-orange-500"></i>
+              <span class="text-sm text-gray-700"
+                ><span class="font-semibold">Today</span> in 30 mins</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs Section -->
+    <div class="max-w-7xl mx-auto px-4 py-4 md:py-6">
+      <div
+        class="flex justify-center gap-8 md:gap-12 mb-6 md:mb-6 border-b border-gray-200"
+      >
+        <button
+          class="tab-btn pb-4 px-2 text-base md:text-lg font-semibold tab-active transition-all"
+          data-tab="what-you-get"
+        >
+          What you get
+        </button>
+        <button
+          class="tab-btn pb-4 px-2 text-base md:text-lg font-semibold tab-inactive hover:text-gray-700 transition-all"
+          data-tab="sourcing"
+        >
+          Sourcing
+        </button>
+      </div>
+
+      <!-- What You Get Section -->
+      <div
+        id="what-you-get"
+        class="tab-content active bg-white rounded-2xl shadow-sm overflow-hidden"
+      >
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8 p-4 md:p-6">
+          <div id="imageCarousel" class="relative">
+            <img
+              id="mainImage"
+              src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=800&h=600&fit=crop"
+              alt="Chicken Curry Cut"
+              class="w-full h-auto rounded-2xl"
+            />
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+              <div class="space-y-4 md:space-y-5">
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Chicken humanely raised in restricted bio-security zones
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Hand selected after age and weight calibration
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start opacity-50">
+                  <div class="check-icon check-gray mt-1">
+                    <i class="fas fa-times text-gray-400 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Meat of chicken on growth promoters
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Antibiotic residue Free
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Artisanal Cuts
+                  </p>
+                </div>
+              </div>
+
+              <div class="space-y-4 md:space-y-5">
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Hygienically vacuum-packed
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Net weight of prepped meat only
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Temperature controlled between 0-4 °C
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start opacity-50">
+                  <div class="check-icon check-gray mt-1">
+                    <i class="fas fa-times text-gray-400 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Mix of Offal Organs
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Freshly cut and packed daily for maximum freshness
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-700 text-sm mt-4">
+              Our chicken is fresh, never frozen, and ready to cook. We ensure
+              the highest standards of quality and hygiene in every pack,
+              providing you with tender, juicy meat that's perfect for your
+              favorite recipes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sourcing Section -->
+      <div
+        id="sourcing"
+        class="tab-content bg-white rounded-2xl shadow-sm overflow-hidden"
+      >
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8 p-4 md:p-6">
+          <div id="imageCarousel" class="relative">
+            <img
+              id="mainImage"
+              src="https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=800&h=600&fit=crop"
+              alt="Chicken Curry Cut"
+              class="w-full h-auto rounded-2xl"
+            />
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+              <div class="space-y-4 md:space-y-5">
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Sourced from trusted local farms with ethical practices
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Birds raised in spacious, stress-free environments
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start opacity-50">
+                  <div class="check-icon check-gray mt-1">
+                    <i class="fas fa-times text-gray-400 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    No industrial factory farming
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Fed natural, hormone-free diet
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Regular veterinary checks for health
+                  </p>
+                </div>
+              </div>
+
+              <div class="space-y-4 md:space-y-5">
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Sustainable farming practices
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Traceable supply chain from farm to table
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Compliance with all food safety regulations
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start opacity-50">
+                  <div class="check-icon check-gray mt-1">
+                    <i class="fas fa-times text-gray-400 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    No imported or frozen stock
+                  </p>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="check-icon check-green mt-1">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <p class="text-gray-900 text-xs md:text-sm leading-relaxed">
+                    Partnered with certified suppliers
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-700 text-sm mt-4">
+              We source our chicken directly from vetted farms that prioritize
+              animal welfare and sustainable methods. This ensures you get the
+              freshest, healthiest meat possible, with full transparency in our
+              supply chain.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- You May Also Like Section -->
+    <div class="max-w-7xl mx-auto px-4 py-4 md:py-8">
+      <h2
+        class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 md:mb-6"
+      >
+        You Also May Like This
+      </h2>
+      <div class="relative">
+        <button
+          id="latestProductsPrev"
+          class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-3 rounded-full transition shadow-md hover:shadow-lg"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div
+          id="latestProductsCarousel"
+          class="scroll-container flex overflow-x-auto gap-3 md:gap-4 snap-x snap-mandatory px-8"
+        ></div>
+        <button
+          id="latestProductsNext"
+          class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-3 rounded-full transition shadow-md hover:shadow-lg"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Safety Video Modal -->
+    <div id="safetyVideoModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="mb-4 h-[500px]">
+          <!-- custom height -->
+          <iframe
+            id="safetyVideo"
+            class="w-full h-full"
+            src="https://www.youtube.com/embed/H9t9DpAsWhE"
+            title="Safety Standards Video"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Image Carousel
+      const images = [
+        "https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=800&h=600&fit=crop",
+      ];
+      let currentImageIndex = 0;
+
+      const mainImage = document.getElementById("mainImage");
+      const carouselDots = document.getElementById("carouselDots");
+      const prevBtn = document.getElementById("prevImage");
+      const nextBtn = document.getElementById("nextImage");
+
+      // Create dots
+      images.forEach((_, index) => {
+        const dot = document.createElement("div");
+        dot.className = `carousel-dot ${index === 0 ? "active" : ""}`;
+        dot.addEventListener("click", () => goToImage(index));
+        carouselDots.appendChild(dot);
+      });
+
+      function updateImage() {
+        mainImage.src = images[currentImageIndex];
+        document.querySelectorAll(".carousel-dot").forEach((dot, index) => {
+          dot.classList.toggle("active", index === currentImageIndex);
+        });
+      }
+
+      function goToImage(index) {
+        currentImageIndex = index;
+        updateImage();
+      }
+
+      prevBtn.addEventListener("click", () => {
+        currentImageIndex =
+          (currentImageIndex - 1 + images.length) % images.length;
+        updateImage();
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        updateImage();
+      });
+
+      // Quantity selector
+      let quantity = 1;
+      const basePrice = 160;
+      const totalPriceEl = document.getElementById("totalPrice");
+
+      function updateQuantity(newQty) {
+        quantity = Math.max(1, Math.min(10, newQty));
+        totalPriceEl.textContent = basePrice * quantity;
+      }
+
+      // Read more functionality
+      const readMoreBtn = document.getElementById("readMoreBtn");
+      const description = document.getElementById("description");
+      const fullText =
+        "Licious Chicken Curry Cut is a premium cut that includes the leg, breast & wings. This smaller, tender cut has equal-sized pieces for uniform cooking and the juiciest bites. Our chicken is sourced from trusted farms where they're raised in a stress-free environment with proper ventilation and hygiene. Each piece is carefully selected and cut by expert butchers to ensure you get the best quality meat every time. The curry cut is perfect for Indian dishes like butter chicken, chicken curry, and chicken masala. With our commitment to quality, you can be assured of fresh, tender, and flavorful chicken in every pack.";
+      let isExpanded = false;
+
+      readMoreBtn.addEventListener("click", () => {
+        isExpanded = !isExpanded;
+        description.textContent = isExpanded
+          ? fullText
+          : fullText.substring(0, 150) + "...";
+        readMoreBtn.textContent = isExpanded ? "Read less" : "Read more";
+      });
+
+      // Tab switching
+      const tabBtns = document.querySelectorAll(".tab-btn");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tab = btn.getAttribute("data-tab");
+
+          // Update active tab button
+          tabBtns.forEach((t) => {
+            t.classList.remove("tab-active");
+            t.classList.add("tab-inactive");
+          });
+          btn.classList.remove("tab-inactive");
+          btn.classList.add("tab-active");
+
+          // Show active tab content
+          tabContents.forEach((content) => {
+            content.classList.remove("active");
+          });
+          document.getElementById(tab).classList.add("active");
+        });
+      });
+
+      // Modal functionality with YouTube video control
+      const safetyVideoModal = document.getElementById("safetyVideoModal");
+      const safetyVideoBtn = document.getElementById("safetyVideoBtn");
+      const closeButtons = document.querySelectorAll(".close-modal");
+      const videoIframe = document.getElementById("safetyVideo");
+
+      safetyVideoBtn.addEventListener("click", () => {
+        safetyVideoModal.style.display = "flex";
+        // Start video playback when modal opens
+        videoIframe.contentWindow.postMessage(
+          '{"event":"command","func":"playVideo","args":""}',
+          "*"
+        );
+      });
+
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          safetyVideoModal.style.display = "none";
+          // Pause the video when modal closes
+          videoIframe.contentWindow.postMessage(
+            '{"event":"command","func":"pauseVideo","args":""}',
+            "*"
+          );
+        });
+      });
+
+      window.addEventListener("click", (event) => {
+        if (event.target === safetyVideoModal) {
+          safetyVideoModal.style.display = "none";
+          // Pause the video when clicking outside the modal
+          videoIframe.contentWindow.postMessage(
+            '{"event":"command","func":"pauseVideo","args":""}',
+            "*"
+          );
+        }
+      });
+
+      // Products data
+      const latestProducts = [
+        {
+          id: 1,
+          name: "Lobster Tails",
+          price: 39.99,
+          discountPrice: 35.99,
+          image:
+            "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&h=400&fit=crop",
+          category: "Shellfish",
+          details: "500 g | 2-3 Pieces | Serves 2",
+        },
+        {
+          id: 2,
+          name: "Swordfish Steaks",
+          price: 22.99,
+          discountPrice: 20.69,
+          image:
+            "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=600&h=400&fit=crop",
+          category: "Fresh Fish",
+          details: "500 g | 4-5 Pieces | Serves 3",
+        },
+        {
+          id: 3,
+          name: "Fresh Mussels",
+          price: 12.99,
+          discountPrice: 11.69,
+          image:
+            "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=600&h=400&fit=crop",
+          category: "Shellfish",
+          details: "500 g | 15-20 Pieces | Serves 2",
+        },
+        {
+          id: 4,
+          name: "Rainbow Trout",
+          price: 18.99,
+          discountPrice: 17.09,
+          image:
+            "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=600&h=400&fit=crop",
+          category: "Fresh Fish",
+          details: "500 g | 2 Pieces | Serves 3",
+        },
+        {
+          id: 5,
+          name: "Squid Rings",
+          price: 14.99,
+          discountPrice: 13.49,
+          image:
+            "https://images.unsplash.com/photo-1559251606-c623743a6d76?w=600&h=400&fit=crop",
+          category: "Shellfish",
+          details: "500 g | Pre-cut | Serves 4",
+        },
+        {
+          id: 6,
+          name: "Halibut Steaks",
+          price: 26.99,
+          discountPrice: 24.29,
+          image:
+            "https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?w=600&h=400&fit=crop",
+          category: "Fresh Fish",
+          details: "500 g | 3-4 Pieces | Serves 3",
+        },
+      ];
+
+      let cart = {};
+
+      function createProductCard(product) {
+        const discountPercentage = Math.round(
+          ((product.price - product.discountPrice) / product.price) * 100
+        );
+        const quantity = cart[product.id] || 0;
+
+        return `
+        <div class="product-card flex-shrink-0 w-[160px] sm:w-[180px] md:w-[200px] snap-start">
+          <div class="product-image-container relative">
+            <img src="${product.image}" alt="${product.name}" loading="lazy" />
+            <div class="absolute bottom-2 right-2 flex items-center gap-1">
+              ${
+                quantity > 0
+                  ? `
+                <button class="quantity-btn" onclick="updateProductQuantity(${product.id}, -1)">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <span class="quantity-count bg-gray-200 text-black px-3 py-1 rounded">${quantity}</span>
+              `
+                  : ""
+              }
+              <button class="quantity-btn" onclick="updateProductQuantity(${
+                product.id
+              }, 1)">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-content">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-details">${product.details}</p>
+            <div class="product-pricing">
+              <span class="product-discount-price">${product.discountPrice.toFixed(
+                2
+              )}</span>
+              <span class="product-original-price">${product.price.toFixed(
+                2
+              )}</span>
+              <span class="product-discount-percent">${discountPercentage}% off</span>
+            </div>
+            <div class="product-offer">
+              <i class="fas fa-bolt"></i>
+              <span>Today in 30 mins</span>
+            </div>
+          </div>
+        </div>
+      `;
+      }
+
+      function updateProductQuantity(productId, change) {
+        if (!cart[productId]) {
+          cart[productId] = 0;
+        }
+        cart[productId] = Math.max(0, cart[productId] + change);
+
+        if (cart[productId] === 0) {
+          delete cart[productId];
+        }
+
+        renderProducts();
+      }
+
+      function renderProducts() {
+        const carousel = document.getElementById("latestProductsCarousel");
+        carousel.innerHTML = latestProducts
+          .map((product) => createProductCard(product))
+          .join("");
+      }
+
+      // Carousel navigation
+      const carousel = document.getElementById("latestProductsCarousel");
+      const prevButton = document.getElementById("latestProductsPrev");
+      const nextButton = document.getElementById("latestProductsNext");
+
+      prevButton.addEventListener("click", () => {
+        carousel.scrollBy({ left: -220, behavior: "smooth" });
+      });
+
+      nextButton.addEventListener("click", () => {
+        carousel.scrollBy({ left: 220, behavior: "smooth" });
+      });
+
+      // Initial render
+      renderProducts();
+
+      // Add to cart functionality
+      document
+        .querySelector(".add-to-cart-btn")
+        .addEventListener("click", () => {
+          alert(
+            `Added ${quantity} item(s) to cart! Total: ₹${basePrice * quantity}`
+          );
+        });
+    </script>
+  </body>
+</html>
