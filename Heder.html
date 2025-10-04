@@ -31,6 +31,8 @@
         --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
           0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
         --border-radius: 0.5rem;
         --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
@@ -167,7 +169,7 @@
         padding: 0.5rem 0.5rem 0.5rem 2rem;
         border: 1px solid var(--border-color);
         border-radius: calc(var(--border-radius) - 0.125rem);
-        font-size: 0.800rem;
+        font-size: 0.8rem;
         outline: none;
         transition: var(--transition);
       }
@@ -342,6 +344,225 @@
         font-weight: 700;
       }
 
+      /* Categories Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        backdrop-filter: blur(2px);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .categories-modal {
+        position: fixed;
+        top: 0;
+        right: 0;
+        transform: translateX(100%);
+        background-color: var(--bg-primary);
+        border-radius: 1rem 0 0 1rem;
+        box-shadow: var(--shadow-lg);
+        width: 90%;
+        max-width: 900px;
+        height: 100vh;
+        z-index: 2001;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .categories-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        line-height: 1;
+      }
+
+      .modal-close:hover {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      .modal-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .categories-list {
+        width: 280px;
+        border-right: 1px solid var(--border-color);
+        overflow-y: auto;
+        padding: 1rem 0;
+      }
+
+      .category-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        border-left: 3px solid transparent;
+      }
+
+      .category-item:hover,
+      .category-item.active {
+        background-color: var(--primary-light);
+        border-left-color: var(--primary-color);
+      }
+
+      .category-item.active {
+        background-color: var(--primary-light);
+      }
+
+      .category-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--primary-light), #fff);
+        border-radius: var(--border-radius);
+        font-size: 1.25rem;
+        transition: var(--transition);
+      }
+
+      .category-item:hover .category-icon,
+      .category-item.active .category-icon {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+      }
+
+      .category-count {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .subcategories-panel {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+
+      .subcategories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .subcategory-card {
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+        background-color: var(--bg-primary);
+      }
+
+      .subcategory-card:hover {
+        border-color: var(--primary-color);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .subcategory-name {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .subcategory-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+
+      .subcategory-item {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        padding: 0.25rem 0.5rem;
+        background-color: var(--bg-secondary);
+        border-radius: 0.25rem;
+        transition: var(--transition);
+      }
+
+      .subcategory-card:hover .subcategory-item {
+        background-color: var(--primary-light);
+        color: var(--primary-color);
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--border-color);
+      }
+
       /* Mobile Footer */
       .mobile-footer {
         position: fixed;
@@ -400,6 +621,28 @@
         font-weight: 600;
       }
 
+      /* Scrollbar Styles */
+      .categories-list::-webkit-scrollbar,
+      .subcategories-panel::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .categories-list::-webkit-scrollbar-track,
+      .subcategories-panel::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+
+      .categories-list::-webkit-scrollbar-thumb,
+      .subcategories-panel::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+      }
+
+      .categories-list::-webkit-scrollbar-thumb:hover,
+      .subcategories-panel::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+      }
+
       /* Responsive Design */
       @media (max-width: 1024px) {
         .nav-items {
@@ -438,6 +681,26 @@
           padding: 0.5rem 2.5rem 0.5rem 0.75rem;
           font-size: 0.8rem;
         }
+
+        .categories-modal {
+          width: 95%;
+          max-height: 85vh;
+        }
+
+        .modal-body {
+          flex-direction: column;
+        }
+
+        .categories-list {
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid var(--border-color);
+          max-height: 200px;
+        }
+
+        .subcategories-grid {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 480px) {
@@ -460,6 +723,18 @@
 
         .location-value {
           font-size: 0.75rem;
+        }
+
+        .modal-header {
+          padding: 1rem;
+        }
+
+        .modal-title {
+          font-size: 1.25rem;
+        }
+
+        .category-item {
+          padding: 0.75rem 1rem;
         }
       }
 
@@ -536,7 +811,7 @@
 
         <!-- Desktop Navigation -->
         <nav class="nav-items" aria-label="Main navigation">
-          <div class="nav-item">
+          <div class="nav-item" id="categoriesButton">
             <i class="fas fa-th-large" aria-hidden="true"></i>
             <span>Categories</span>
           </div>
@@ -577,6 +852,26 @@
       </div>
     </header>
 
+    <!-- Categories Modal -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="categories-modal" id="categoriesModal">
+      <div class="modal-header">
+        <h2 class="modal-title">Shop by Category</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="categories-list" id="categoriesList"></div>
+        <div class="subcategories-panel" id="subcategoriesPanel">
+          <div class="empty-state">
+            <i class="fas fa-mouse-pointer"></i>
+            <p>Hover over a category to see subcategories</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Mobile Footer -->
     <footer class="mobile-footer" role="contentinfo">
       <nav class="footer-nav" aria-label="Mobile navigation">
@@ -584,7 +879,12 @@
           <i class="fas fa-home" aria-hidden="true"></i>
           <span>Home</span>
         </a>
-        <a href="/categories" class="footer-item" aria-label="Categories">
+        <a
+          href="/categories"
+          class="footer-item"
+          aria-label="Categories"
+          id="mobileCategoriesButton"
+        >
           <i class="fas fa-th-large" aria-hidden="true"></i>
           <span>Categories</span>
         </a>
@@ -611,6 +911,341 @@
         cartCount: 1,
         cartTotal: 207,
         selectedLocation: "Select Location",
+        categories: [
+          {
+            id: 1,
+            name: "Fruits & Vegetables",
+            icon: "🥬",
+            count: 156,
+            subcategories: [
+              {
+                name: "Fresh Vegetables",
+                items: ["Tomato", "Potato", "Onion", "Carrot", "Cabbage"],
+              },
+              {
+                name: "Fresh Fruits",
+                items: ["Apple", "Banana", "Orange", "Mango", "Grapes"],
+              },
+              {
+                name: "Exotic Vegetables",
+                items: ["Broccoli", "Zucchini", "Bell Pepper", "Mushroom"],
+              },
+              {
+                name: "Exotic Fruits",
+                items: ["Avocado", "Kiwi", "Dragon Fruit", "Blueberry"],
+              },
+            ],
+          },
+          {
+            id: 2,
+            name: "Dairy & Bakery",
+            icon: "🥛",
+            count: 98,
+            subcategories: [
+              {
+                name: "Milk & Cream",
+                items: [
+                  "Full Cream Milk",
+                  "Toned Milk",
+                  "Fresh Cream",
+                  "Flavored Milk",
+                ],
+              },
+              {
+                name: "Cheese & Butter",
+                items: ["Cheddar", "Mozzarella", "Paneer", "Butter", "Ghee"],
+              },
+              {
+                name: "Bread & Buns",
+                items: [
+                  "White Bread",
+                  "Brown Bread",
+                  "Burger Buns",
+                  "Pizza Base",
+                ],
+              },
+              {
+                name: "Cakes & Pastries",
+                items: [
+                  "Black Forest",
+                  "Chocolate Cake",
+                  "Donuts",
+                  "Croissant",
+                ],
+              },
+            ],
+          },
+          {
+            id: 3,
+            name: "Meat & Seafood",
+            icon: "🍖",
+            count: 67,
+            subcategories: [
+              {
+                name: "Fresh Chicken",
+                items: [
+                  "Chicken Breast",
+                  "Chicken Legs",
+                  "Whole Chicken",
+                  "Minced Chicken",
+                ],
+              },
+              {
+                name: "Fresh Fish",
+                items: ["Salmon", "Tuna", "Pomfret", "Prawns", "Crab"],
+              },
+              {
+                name: "Mutton & Lamb",
+                items: ["Mutton Curry Cut", "Lamb Chops", "Minced Mutton"],
+              },
+              {
+                name: "Eggs",
+                items: ["White Eggs", "Brown Eggs", "Organic Eggs"],
+              },
+            ],
+          },
+          {
+            id: 4,
+            name: "Rice & Grains",
+            icon: "🌾",
+            count: 84,
+            subcategories: [
+              {
+                name: "Rice Varieties",
+                items: [
+                  "Basmati",
+                  "Brown Rice",
+                  "Sona Masoori",
+                  "Jasmine Rice",
+                ],
+              },
+              {
+                name: "Wheat & Flour",
+                items: [
+                  "Whole Wheat Flour",
+                  "All Purpose Flour",
+                  "Multigrain Flour",
+                ],
+              },
+              {
+                name: "Pulses & Lentils",
+                items: [
+                  "Toor Dal",
+                  "Moong Dal",
+                  "Urad Dal",
+                  "Chana Dal",
+                  "Masoor Dal",
+                ],
+              },
+              {
+                name: "Other Grains",
+                items: ["Oats", "Quinoa", "Barley", "Millets", "Ragi"],
+              },
+            ],
+          },
+          {
+            id: 5,
+            name: "Snacks & Beverages",
+            icon: "🍿",
+            count: 142,
+            subcategories: [
+              {
+                name: "Chips & Namkeen",
+                items: [
+                  "Potato Chips",
+                  "Corn Chips",
+                  "Mixture",
+                  "Sev",
+                  "Bhujia",
+                ],
+              },
+              {
+                name: "Biscuits & Cookies",
+                items: ["Cream Biscuits", "Digestive", "Cookies", "Crackers"],
+              },
+              {
+                name: "Cold Drinks",
+                items: ["Cola", "Lemon Soda", "Energy Drinks", "Fruit Juice"],
+              },
+              {
+                name: "Tea & Coffee",
+                items: [
+                  "Black Tea",
+                  "Green Tea",
+                  "Instant Coffee",
+                  "Coffee Beans",
+                ],
+              },
+            ],
+          },
+          {
+            id: 6,
+            name: "Cooking Essentials",
+            icon: "🍳",
+            count: 112,
+            subcategories: [
+              {
+                name: "Cooking Oils",
+                items: [
+                  "Sunflower Oil",
+                  "Olive Oil",
+                  "Coconut Oil",
+                  "Mustard Oil",
+                ],
+              },
+              {
+                name: "Spices & Masalas",
+                items: [
+                  "Turmeric",
+                  "Red Chili",
+                  "Coriander",
+                  "Garam Masala",
+                  "Cumin",
+                ],
+              },
+              {
+                name: "Sauces & Condiments",
+                items: [
+                  "Tomato Ketchup",
+                  "Soy Sauce",
+                  "Mayonnaise",
+                  "Chili Sauce",
+                ],
+              },
+              {
+                name: "Salt & Sugar",
+                items: [
+                  "Refined Salt",
+                  "Rock Salt",
+                  "White Sugar",
+                  "Brown Sugar",
+                ],
+              },
+            ],
+          },
+          {
+            id: 7,
+            name: "Personal Care",
+            icon: "🧴",
+            count: 95,
+            subcategories: [
+              {
+                name: "Bath & Body",
+                items: ["Shower Gel", "Soap", "Body Lotion", "Body Wash"],
+              },
+              {
+                name: "Hair Care",
+                items: ["Shampoo", "Conditioner", "Hair Oil", "Hair Serum"],
+              },
+              {
+                name: "Oral Care",
+                items: [
+                  "Toothpaste",
+                  "Toothbrush",
+                  "Mouthwash",
+                  "Dental Floss",
+                ],
+              },
+              {
+                name: "Skin Care",
+                items: ["Face Wash", "Moisturizer", "Sunscreen", "Face Cream"],
+              },
+            ],
+          },
+          {
+            id: 8,
+            name: "Household Items",
+            icon: "🏠",
+            count: 76,
+            subcategories: [
+              {
+                name: "Cleaning Supplies",
+                items: [
+                  "Floor Cleaner",
+                  "Detergent",
+                  "Dish Wash",
+                  "Glass Cleaner",
+                ],
+              },
+              {
+                name: "Kitchen Accessories",
+                items: [
+                  "Foil Paper",
+                  "Trash Bags",
+                  "Cling Wrap",
+                  "Tissue Paper",
+                ],
+              },
+              {
+                name: "Fresheners",
+                items: ["Air Freshener", "Room Spray", "Car Freshener"],
+              },
+              {
+                name: "Disposables",
+                items: ["Paper Plates", "Plastic Cups", "Napkins", "Straws"],
+              },
+            ],
+          },
+          {
+            id: 9,
+            name: "Baby Care",
+            icon: "👶",
+            count: 54,
+            subcategories: [
+              {
+                name: "Diapers & Wipes",
+                items: ["Baby Diapers", "Baby Wipes", "Diaper Rash Cream"],
+              },
+              {
+                name: "Baby Food",
+                items: [
+                  "Infant Formula",
+                  "Baby Cereal",
+                  "Baby Puree",
+                  "Snacks",
+                ],
+              },
+              {
+                name: "Baby Bath",
+                items: ["Baby Soap", "Baby Shampoo", "Baby Lotion", "Baby Oil"],
+              },
+              {
+                name: "Baby Accessories",
+                items: ["Feeding Bottles", "Pacifiers", "Bibs", "Wet Bags"],
+              },
+            ],
+          },
+          {
+            id: 10,
+            name: "Pet Care",
+            icon: "🐾",
+            count: 43,
+            subcategories: [
+              {
+                name: "Pet Food",
+                items: ["Dog Food", "Cat Food", "Bird Food", "Fish Food"],
+              },
+              {
+                name: "Pet Accessories",
+                items: ["Leash", "Collar", "Pet Bed", "Food Bowl"],
+              },
+              {
+                name: "Pet Grooming",
+                items: ["Pet Shampoo", "Brush", "Nail Clipper", "Ear Cleaner"],
+              },
+              {
+                name: "Pet Treats",
+                items: [
+                  "Dog Treats",
+                  "Cat Treats",
+                  "Chew Sticks",
+                  "Dental Sticks",
+                ],
+              },
+            ],
+          },
+        ],
+        activeCategory: null,
       };
 
       // DOM Elements
@@ -622,6 +1257,15 @@
         profileButton: document.getElementById("profileButton"),
         profileDropdown: document.getElementById("profileDropdown"),
         searchInput: document.getElementById("searchInput"),
+        categoriesButton: document.getElementById("categoriesButton"),
+        mobileCategoriesButton: document.getElementById(
+          "mobileCategoriesButton"
+        ),
+        modalOverlay: document.getElementById("modalOverlay"),
+        categoriesModal: document.getElementById("categoriesModal"),
+        modalClose: document.getElementById("modalClose"),
+        categoriesList: document.getElementById("categoriesList"),
+        subcategoriesPanel: document.getElementById("subcategoriesPanel"),
       };
 
       // Location functionality
@@ -632,7 +1276,6 @@
         }
 
         bindEvents() {
-          // Handle click on location selector to toggle dropdown
           elements.locationSelector.addEventListener("click", (e) => {
             e.stopPropagation();
             if (!this.isDropdownOpen) {
@@ -640,7 +1283,6 @@
             }
           });
 
-          // Handle keydown for accessibility
           elements.locationSelector.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
@@ -650,7 +1292,6 @@
             }
           });
 
-          // Handle input submission
           elements.locationInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -658,12 +1299,10 @@
             }
           });
 
-          // Prevent dropdown from closing when clicking inside it
           elements.locationDropdown.addEventListener("click", (e) => {
             e.stopPropagation();
           });
 
-          // Close dropdown on blur, but only if not clicking within dropdown
           elements.locationInput.addEventListener("blur", () => {
             setTimeout(() => {
               if (!elements.locationDropdown.contains(document.activeElement)) {
@@ -672,7 +1311,6 @@
             }, 150);
           });
 
-          // Close dropdown when clicking outside
           document.addEventListener("click", (e) => {
             if (
               !elements.locationSelector.contains(e.target) &&
@@ -783,16 +1421,160 @@
           const query = elements.searchInput.value.trim();
           if (query) {
             console.log("Searching for:", query);
-            // In a real app, you'd navigate to search results or make an API call
-            // window.location.href = `/search?q=${encodeURIComponent(query)}`;
           }
+        }
+      }
+
+      // Categories Modal functionality
+      class CategoriesModal {
+        constructor() {
+          this.isOpen = false;
+          this.bindEvents();
+          this.renderCategories();
+        }
+
+        bindEvents() {
+          // Desktop categories button
+          elements.categoriesButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.openModal();
+          });
+
+          // Mobile categories button
+          elements.mobileCategoriesButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.openModal();
+          });
+
+          // Close button
+          elements.modalClose.addEventListener("click", () => {
+            this.closeModal();
+          });
+
+          // Overlay click
+          elements.modalOverlay.addEventListener("click", () => {
+            this.closeModal();
+          });
+
+          // ESC key
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this.isOpen) {
+              this.closeModal();
+            }
+          });
+        }
+
+        openModal() {
+          elements.modalOverlay.classList.add("active");
+          elements.categoriesModal.classList.add("active");
+          document.body.style.overflow = "hidden";
+          this.isOpen = true;
+        }
+
+        closeModal() {
+          elements.modalOverlay.classList.remove("active");
+          elements.categoriesModal.classList.remove("active");
+          document.body.style.overflow = "";
+          this.isOpen = false;
+        }
+
+        renderCategories() {
+          const html = AppState.categories
+            .map(
+              (category) => `
+            <div class="category-item" data-category-id="${category.id}">
+              <div class="category-icon">${category.icon}</div>
+              <div class="category-info">
+                <div class="category-name">${category.name}</div>
+                <div class="category-count">${category.count} products</div>
+              </div>
+            </div>
+          `
+            )
+            .join("");
+
+          elements.categoriesList.innerHTML = html;
+
+          // Add hover events
+          const categoryItems =
+            elements.categoriesList.querySelectorAll(".category-item");
+          categoryItems.forEach((item) => {
+            item.addEventListener("mouseenter", () => {
+              this.showSubcategories(item.dataset.categoryId);
+            });
+
+            item.addEventListener("click", () => {
+              this.showSubcategories(item.dataset.categoryId);
+            });
+          });
+        }
+
+        showSubcategories(categoryId) {
+          // Remove active class from all categories
+          const allCategories =
+            elements.categoriesList.querySelectorAll(".category-item");
+          allCategories.forEach((cat) => cat.classList.remove("active"));
+
+          // Add active class to selected category
+          const activeCategory = elements.categoriesList.querySelector(
+            `[data-category-id="${categoryId}"]`
+          );
+          if (activeCategory) {
+            activeCategory.classList.add("active");
+          }
+
+          const category = AppState.categories.find(
+            (cat) => cat.id == categoryId
+          );
+          if (!category || !category.subcategories) return;
+
+          const html = `
+            <div class="subcategories-grid">
+              ${category.subcategories
+                .map(
+                  (sub) => `
+                <div class="subcategory-card">
+                  <div class="subcategory-name">${sub.name}</div>
+                  <div class="subcategory-items">
+                    ${sub.items
+                      .map(
+                        (item) => `
+                      <span class="subcategory-item">${item}</span>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          `;
+
+          elements.subcategoriesPanel.innerHTML = html;
+
+          // Add click events to subcategory cards
+          const subcategoryCards =
+            elements.subcategoriesPanel.querySelectorAll(".subcategory-card");
+          subcategoryCards.forEach((card) => {
+            card.addEventListener("click", () => {
+              const subcategoryName =
+                card.querySelector(".subcategory-name").textContent;
+              console.log(
+                "Navigating to:",
+                category.name,
+                "->",
+                subcategoryName
+              );
+              // In a real app, navigate to the subcategory page
+            });
+          });
         }
       }
 
       // Cart functionality
       class CartManager {
         static updateCartDisplay() {
-          // Update desktop cart display
           const cartButton = document.querySelector(".cart-button");
           if (cartButton) {
             const countElement = cartButton.querySelector(".cart-count");
@@ -808,7 +1590,6 @@
             }
           }
 
-          // Update mobile cart badge
           const cartBadge = document.querySelector(".cart-badge");
           if (cartBadge) {
             cartBadge.textContent = AppState.cartCount;
@@ -817,27 +1598,13 @@
         }
       }
 
-      // Utility functions
-      const Utils = {
-        debounce(func, wait) {
-          let timeout;
-          return function executedFunction(...args) {
-            const later = () => {
-              clearTimeout(timeout);
-              func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-          };
-        },
-      };
-
       // Initialize application
       document.addEventListener("DOMContentLoaded", () => {
         try {
           new LocationManager();
           new ProfileManager();
           new SearchManager();
+          new CategoriesModal();
           CartManager.updateCartDisplay();
 
           console.log("Vempala application initialized successfully");
@@ -851,7 +1618,7 @@
         console.error("Application error:", event.error);
       });
 
-      // Performance monitoring (basic)
+      // Performance monitoring
       window.addEventListener("load", () => {
         const loadTime = performance.now();
         console.log(`Page loaded in ${Math.round(loadTime)}ms`);
