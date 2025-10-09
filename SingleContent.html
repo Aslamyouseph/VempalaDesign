@@ -9,10 +9,43 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
+      :root {
+        --primary-color: #ec4899;
+        --primary-hover: #db2777;
+        --primary-light: #fdf2f8;
+        --secondary-color: #10b981;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f9fafb;
+        --border-color: #e5e7eb;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+        --border-radius: 0.5rem;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
           "Helvetica", "Arial", sans-serif;
+        color: var(--text-primary);
+        background-color: var(--bg-primary);
       }
 
       .tab-active {
@@ -301,9 +334,858 @@
           right: 6px;
         }
       }
+
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        height: 4rem;
+      }
+
+      /* Logo */
+      .logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.25rem;
+        transition: var(--transition);
+      }
+
+      .logo:hover {
+        color: var(--primary-hover);
+      }
+
+      .logo-icon {
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.5rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* Location Selector */
+      .location-selector {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: var(--bg-secondary);
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--border-radius);
+        gap: 0.5rem;
+        min-width: 160px;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 1px solid transparent;
+      }
+
+      .location-selector:hover {
+        background-color: var(--primary-light);
+        border-color: var(--primary-color);
+      }
+
+      .location-icon {
+        color: var(--primary-color);
+        font-size: 0.875rem;
+      }
+
+      .location-text {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+
+      .location-value {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--primary-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .location-dropdown {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        left: 0;
+        right: 0;
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md);
+        padding: 0.75rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-0.5rem);
+        transition: var(--transition);
+      }
+
+      .location-dropdown.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .location-input {
+        width: 100%;
+        padding: 0.5rem 0.5rem 0.5rem 2rem;
+        border: 1px solid var(--border-color);
+        border-radius: calc(var(--border-radius) - 0.125rem);
+        font-size: 0.8rem;
+        outline: none;
+        transition: var(--transition);
+      }
+
+      .location-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgb(236 72 153 / 0.1);
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        font-size: 0.875rem;
+      }
+
+      /* Search Bar */
+      .search-container {
+        flex: 1;
+        max-width: 600px;
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.75rem 3rem 0.75rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius);
+        font-size: 0.875rem;
+        transition: var(--transition);
+        background-color: var(--bg-secondary);
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        background-color: var(--bg-primary);
+        box-shadow: 0 0 0 3px rgb(236 72 153 / 0.1);
+      }
+
+      .search-button {
+        position: absolute;
+        right: 0.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.4rem;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+        border-radius: calc(var(--border-radius) - 0.125rem);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .search-button:hover {
+        background: var(--primary-hover);
+      }
+
+      /* Navigation Items */
+      .nav-items {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        color: var(--text-primary);
+        font-weight: 500;
+        font-size: 0.875rem;
+        transition: var(--transition);
+        cursor: pointer;
+      }
+
+      .nav-item:hover {
+        background-color: var(--primary-light);
+        color: var(--primary-color);
+      }
+
+      /* Profile Dropdown */
+      .profile-dropdown {
+        position: relative;
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md);
+        min-width: 180px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-0.5rem);
+        transition: var(--transition);
+      }
+
+      .dropdown-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: var(--transition);
+      }
+
+      .dropdown-item:hover {
+        background-color: var(--primary-light);
+        color: var(--primary-color);
+      }
+
+      /* Cart Button */
+      .cart-button {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: white;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.875rem;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+      }
+
+      .cart-button:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .cart-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.2;
+      }
+
+      .cart-count {
+        font-size: 0.75rem;
+        opacity: 0.9;
+      }
+
+      .cart-total {
+        font-size: 0.875rem;
+        font-weight: 700;
+      }
+
+      /* Categories Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        backdrop-filter: blur(2px);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .categories-modal {
+        position: fixed;
+        top: 0;
+        right: 0;
+        transform: translateX(100%);
+        background-color: var(--bg-primary);
+        border-radius: 1rem 0 0 1rem;
+        box-shadow: var(--shadow-lg);
+        width: 90%;
+        max-width: 900px;
+        height: 100vh;
+        z-index: 2001;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .categories-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        line-height: 1;
+      }
+
+      .modal-close:hover {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      .modal-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .categories-list {
+        width: 280px;
+        border-right: 1px solid var(--border-color);
+        overflow-y: auto;
+        padding: 1rem 0;
+      }
+
+      .category-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        border-left: 3px solid transparent;
+      }
+
+      .category-item:hover,
+      .category-item.active {
+        background-color: var(--primary-light);
+        border-left-color: var(--primary-color);
+      }
+
+      .category-item.active {
+        background-color: var(--primary-light);
+      }
+
+      .category-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--primary-light), #fff);
+        border-radius: var(--border-radius);
+        font-size: 1.25rem;
+        transition: var(--transition);
+      }
+
+      .category-item:hover .category-icon,
+      .category-item.active .category-icon {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+      }
+
+      .category-count {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .subcategories-panel {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+      }
+
+      .subcategories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .subcategory-card {
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+        background-color: var(--bg-primary);
+      }
+
+      .subcategory-card:hover {
+        border-color: var(--primary-color);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+      }
+
+      .subcategory-name {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .subcategory-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+
+      .subcategory-item {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        padding: 0.25rem 0.5rem;
+        background-color: var(--bg-secondary);
+        border-radius: 0.25rem;
+        transition: var(--transition);
+      }
+
+      .subcategory-card:hover .subcategory-item {
+        background-color: var(--primary-light);
+        color: var(--primary-color);
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--border-color);
+      }
+
+      /* Mobile Footer */
+      .mobile-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-primary);
+        border-top: 1px solid var(--border-color);
+        padding: 0.5rem 0;
+        z-index: 1000;
+        display: none;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .footer-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        position: relative;
+      }
+
+      .footer-item.active {
+        color: var(--secondary-color);
+      }
+
+      .footer-item:hover {
+        color: var(--primary-color);
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: 0.25rem;
+        right: 0.25rem;
+        background: var(--secondary-color);
+        color: white;
+        border-radius: 50%;
+        width: 1rem;
+        height: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.625rem;
+        font-weight: 600;
+      }
+
+      /* Scrollbar Styles */
+      .categories-list::-webkit-scrollbar,
+      .subcategories-panel::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .categories-list::-webkit-scrollbar-track,
+      .subcategories-panel::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+      }
+
+      .categories-list::-webkit-scrollbar-thumb,
+      .subcategories-panel::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+      }
+
+      .categories-list::-webkit-scrollbar-thumb:hover,
+      .subcategories-panel::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .nav-items {
+          display: none;
+        }
+
+        .mobile-footer {
+          display: block;
+        }
+
+        .header-container {
+          padding-bottom: 4rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header-container {
+          gap: 0.5rem;
+          padding: 0 0.75rem;
+        }
+
+        .logo-text {
+          display: none;
+        }
+
+        .location-text {
+          display: none;
+        }
+
+        .location-selector {
+          min-width: 120px;
+          padding: 0.5rem;
+        }
+
+        .search-input {
+          padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+          font-size: 0.8rem;
+        }
+
+        .categories-modal {
+          width: 95%;
+          max-height: 85vh;
+        }
+
+        .modal-body {
+          flex-direction: column;
+        }
+
+        .categories-list {
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid var(--border-color);
+          max-height: 200px;
+        }
+
+        .subcategories-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header-container {
+          height: 3.5rem;
+          gap: 0.25rem;
+          padding: 0 0.5rem;
+        }
+
+        .logo-icon {
+          width: 1.5rem;
+          height: 1.5rem;
+          margin-right: 0.25rem;
+        }
+
+        .location-selector {
+          min-width: 100px;
+          padding: 0.375rem;
+        }
+
+        .location-value {
+          font-size: 0.75rem;
+        }
+
+        .modal-header {
+          padding: 1rem;
+        }
+
+        .modal-title {
+          font-size: 1.25rem;
+        }
+
+        .category-item {
+          padding: 0.75rem 1rem;
+        }
+      }
+
+      /* Utility Classes */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
     </style>
   </head>
   <body class="bg-gray-50">
+    <header class="header" role="banner">
+      <div class="header-container">
+        <!-- Logo -->
+        <a href="/home.html" class="logo" aria-label="Vempala Home">
+          <div class="logo-icon">V</div>
+          <span class="logo-text">Vempala</span>
+        </a>
+
+        <!-- Location Selector -->
+        <div
+          class="location-selector"
+          id="locationSelector"
+          role="button"
+          tabindex="0"
+          aria-label="Select delivery location"
+        >
+          <i class="fas fa-map-marker-alt location-icon" aria-hidden="true"></i>
+          <div>
+            <div class="location-text">Deliver to</div>
+            <div class="location-value" id="locationValue">Select Location</div>
+          </div>
+
+          <div class="location-dropdown" id="locationDropdown">
+            <div class="input-wrapper">
+              <i
+                class="fas fa-map-marker-alt input-icon"
+                aria-hidden="true"
+              ></i>
+              <input
+                type="text"
+                class="location-input"
+                id="locationInput"
+                placeholder="location"
+                aria-label="Enter delivery location"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+          <form role="search" aria-label="Search products">
+            <input
+              type="search"
+              class="search-input"
+              placeholder="Search for products, brands and more..."
+              aria-label="Search products"
+              id="searchInput"
+            />
+            <button type="submit" class="search-button" aria-label="Search">
+              <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="nav-items" aria-label="Main navigation">
+          <div class="nav-item" id="categoriesButton">
+            <i class="fas fa-th-large" aria-hidden="true"></i>
+            <span>Categories</span>
+          </div>
+
+          <div class="profile-dropdown">
+            <div
+              class="nav-item"
+              id="profileButton"
+              role="button"
+              tabindex="0"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i class="fas fa-user" aria-hidden="true"></i>
+              <span>Account</span>
+            </div>
+
+            <div class="dropdown-menu" id="profileDropdown" role="menu">
+              <a href="./login.html" class="dropdown-item" role="menuitem">
+                <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                Sign In
+              </a>
+              <a
+                href="./OrderSummary.html"
+                class="dropdown-item"
+                role="menuitem"
+              >
+                <i class="fas fa-box" aria-hidden="true"></i>
+                Orders
+              </a>
+            </div>
+          </div>
+
+          <a href="/cart" class="cart-button" aria-label="View shopping cart">
+            <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+            <div class="cart-info">
+              <span class="cart-count">1 item</span>
+              <span class="cart-total">₹207</span>
+            </div>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Categories Modal -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="categories-modal" id="categoriesModal">
+      <div class="modal-header">
+        <h2 class="modal-title">Shop by Category</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="categories-list" id="categoriesList"></div>
+        <div class="subcategories-panel" id="subcategoriesPanel">
+          <div class="empty-state">
+            <i class="fas fa-mouse-pointer"></i>
+            <p>Hover over a category to see subcategories</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Footer -->
+    <footer class="mobile-footer" role="contentinfo">
+      <nav class="footer-nav" aria-label="Mobile navigation">
+        <a href="/home.html" class="footer-item active" aria-label="Home">
+          <i class="fas fa-home" aria-hidden="true"></i>
+          <span>Home</span>
+        </a>
+        <a
+          href="/categories"
+          class="footer-item"
+          aria-label="Categories"
+          id="mobileCategoriesButton"
+        >
+          <i class="fas fa-th-large" aria-hidden="true"></i>
+          <span>Categories</span>
+        </a>
+        <a href="/login.html" class="footer-item" aria-label="Account">
+          <i class="fas fa-user" aria-hidden="true"></i>
+          <span>Account</span>
+        </a>
+        <a href="/OrderSummary.html" class="footer-item" aria-label="Offers">
+          <i class="fas fa-tags" aria-hidden="true"></i>
+          <span>orders</span>
+        </a>
+      </nav>
+    </footer>
     <div class="max-w-6xl mx-auto px-2 py-4 md:py-8">
       <div class="grid md:grid-cols-2 gap-6 md:gap-12">
         <!-- Left Column - Image Carousel -->
@@ -715,7 +1597,135 @@
         </div>
       </div>
     </div>
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Brand Section -->
+          <div class="flex flex-col items-center md:items-start">
+            <h2 class="text-2xl font-bold mb-4">Ocean's Finest</h2>
+            <p class="text-gray-400 text-sm mb-4 text-center md:text-left">
+              Bringing the freshest seafood to your doorstep with quality and
+              care.
+            </p>
+            <div class="flex gap-4">
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-facebook-f text-lg"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-twitter text-lg"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-instagram text-lg"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-linkedin-in text-lg"></i>
+              </a>
+            </div>
+          </div>
 
+          <!-- Shop Links -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Shop</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >All Products</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Fresh Fish</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Shellfish</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Frozen Seafood</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Special Offers</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Support Links -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Support</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >FAQs</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Shipping & Returns</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Order Tracking</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white text-sm transition"
+                  >Terms & Conditions</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Contact Info -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+            <p class="text-gray-400 text-sm mb-4">
+              123 Ocean Avenue<br />
+              Seaside City, SC 12345
+            </p>
+            <p class="text-gray-400 text-sm mb-2">📞 (123) 456-7890</p>
+            <p class="text-gray-400 text-sm">✉️ info@oceansfinest.com</p>
+          </div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-gray-800 text-center">
+          <p class="text-gray-400 text-sm">
+            &copy; 2025 Ocean's Finest. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
     <script>
       // Image Carousel
       const images = [
@@ -1006,6 +2016,723 @@
             `Added ${quantity} item(s) to cart! Total: ₹${basePrice * quantity}`
           );
         });
+      // Application state
+      const AppState = {
+        cartCount: 1,
+        cartTotal: 207,
+        selectedLocation: "Select Location",
+        categories: [
+          {
+            id: 1,
+            name: "Fruits & Vegetables",
+            icon: "🥬",
+            count: 156,
+            subcategories: [
+              {
+                name: "Fresh Vegetables",
+                items: ["Tomato", "Potato", "Onion", "Carrot", "Cabbage"],
+              },
+              {
+                name: "Fresh Fruits",
+                items: ["Apple", "Banana", "Orange", "Mango", "Grapes"],
+              },
+              {
+                name: "Exotic Vegetables",
+                items: ["Broccoli", "Zucchini", "Bell Pepper", "Mushroom"],
+              },
+              {
+                name: "Exotic Fruits",
+                items: ["Avocado", "Kiwi", "Dragon Fruit", "Blueberry"],
+              },
+            ],
+          },
+          {
+            id: 2,
+            name: "Dairy & Bakery",
+            icon: "🥛",
+            count: 98,
+            subcategories: [
+              {
+                name: "Milk & Cream",
+                items: [
+                  "Full Cream Milk",
+                  "Toned Milk",
+                  "Fresh Cream",
+                  "Flavored Milk",
+                ],
+              },
+              {
+                name: "Cheese & Butter",
+                items: ["Cheddar", "Mozzarella", "Paneer", "Butter", "Ghee"],
+              },
+              {
+                name: "Bread & Buns",
+                items: [
+                  "White Bread",
+                  "Brown Bread",
+                  "Burger Buns",
+                  "Pizza Base",
+                ],
+              },
+              {
+                name: "Cakes & Pastries",
+                items: [
+                  "Black Forest",
+                  "Chocolate Cake",
+                  "Donuts",
+                  "Croissant",
+                ],
+              },
+            ],
+          },
+          {
+            id: 3,
+            name: "Meat & Seafood",
+            icon: "🍖",
+            count: 67,
+            subcategories: [
+              {
+                name: "Fresh Chicken",
+                items: [
+                  "Chicken Breast",
+                  "Chicken Legs",
+                  "Whole Chicken",
+                  "Minced Chicken",
+                ],
+              },
+              {
+                name: "Fresh Fish",
+                items: ["Salmon", "Tuna", "Pomfret", "Prawns", "Crab"],
+              },
+              {
+                name: "Mutton & Lamb",
+                items: ["Mutton Curry Cut", "Lamb Chops", "Minced Mutton"],
+              },
+              {
+                name: "Eggs",
+                items: ["White Eggs", "Brown Eggs", "Organic Eggs"],
+              },
+            ],
+          },
+          {
+            id: 4,
+            name: "Rice & Grains",
+            icon: "🌾",
+            count: 84,
+            subcategories: [
+              {
+                name: "Rice Varieties",
+                items: [
+                  "Basmati",
+                  "Brown Rice",
+                  "Sona Masoori",
+                  "Jasmine Rice",
+                ],
+              },
+              {
+                name: "Wheat & Flour",
+                items: [
+                  "Whole Wheat Flour",
+                  "All Purpose Flour",
+                  "Multigrain Flour",
+                ],
+              },
+              {
+                name: "Pulses & Lentils",
+                items: [
+                  "Toor Dal",
+                  "Moong Dal",
+                  "Urad Dal",
+                  "Chana Dal",
+                  "Masoor Dal",
+                ],
+              },
+              {
+                name: "Other Grains",
+                items: ["Oats", "Quinoa", "Barley", "Millets", "Ragi"],
+              },
+            ],
+          },
+          {
+            id: 5,
+            name: "Snacks & Beverages",
+            icon: "🍿",
+            count: 142,
+            subcategories: [
+              {
+                name: "Chips & Namkeen",
+                items: [
+                  "Potato Chips",
+                  "Corn Chips",
+                  "Mixture",
+                  "Sev",
+                  "Bhujia",
+                ],
+              },
+              {
+                name: "Biscuits & Cookies",
+                items: ["Cream Biscuits", "Digestive", "Cookies", "Crackers"],
+              },
+              {
+                name: "Cold Drinks",
+                items: ["Cola", "Lemon Soda", "Energy Drinks", "Fruit Juice"],
+              },
+              {
+                name: "Tea & Coffee",
+                items: [
+                  "Black Tea",
+                  "Green Tea",
+                  "Instant Coffee",
+                  "Coffee Beans",
+                ],
+              },
+            ],
+          },
+          {
+            id: 6,
+            name: "Cooking Essentials",
+            icon: "🍳",
+            count: 112,
+            subcategories: [
+              {
+                name: "Cooking Oils",
+                items: [
+                  "Sunflower Oil",
+                  "Olive Oil",
+                  "Coconut Oil",
+                  "Mustard Oil",
+                ],
+              },
+              {
+                name: "Spices & Masalas",
+                items: [
+                  "Turmeric",
+                  "Red Chili",
+                  "Coriander",
+                  "Garam Masala",
+                  "Cumin",
+                ],
+              },
+              {
+                name: "Sauces & Condiments",
+                items: [
+                  "Tomato Ketchup",
+                  "Soy Sauce",
+                  "Mayonnaise",
+                  "Chili Sauce",
+                ],
+              },
+              {
+                name: "Salt & Sugar",
+                items: [
+                  "Refined Salt",
+                  "Rock Salt",
+                  "White Sugar",
+                  "Brown Sugar",
+                ],
+              },
+            ],
+          },
+          {
+            id: 7,
+            name: "Personal Care",
+            icon: "🧴",
+            count: 95,
+            subcategories: [
+              {
+                name: "Bath & Body",
+                items: ["Shower Gel", "Soap", "Body Lotion", "Body Wash"],
+              },
+              {
+                name: "Hair Care",
+                items: ["Shampoo", "Conditioner", "Hair Oil", "Hair Serum"],
+              },
+              {
+                name: "Oral Care",
+                items: [
+                  "Toothpaste",
+                  "Toothbrush",
+                  "Mouthwash",
+                  "Dental Floss",
+                ],
+              },
+              {
+                name: "Skin Care",
+                items: ["Face Wash", "Moisturizer", "Sunscreen", "Face Cream"],
+              },
+            ],
+          },
+          {
+            id: 8,
+            name: "Household Items",
+            icon: "🏠",
+            count: 76,
+            subcategories: [
+              {
+                name: "Cleaning Supplies",
+                items: [
+                  "Floor Cleaner",
+                  "Detergent",
+                  "Dish Wash",
+                  "Glass Cleaner",
+                ],
+              },
+              {
+                name: "Kitchen Accessories",
+                items: [
+                  "Foil Paper",
+                  "Trash Bags",
+                  "Cling Wrap",
+                  "Tissue Paper",
+                ],
+              },
+              {
+                name: "Fresheners",
+                items: ["Air Freshener", "Room Spray", "Car Freshener"],
+              },
+              {
+                name: "Disposables",
+                items: ["Paper Plates", "Plastic Cups", "Napkins", "Straws"],
+              },
+            ],
+          },
+          {
+            id: 9,
+            name: "Baby Care",
+            icon: "👶",
+            count: 54,
+            subcategories: [
+              {
+                name: "Diapers & Wipes",
+                items: ["Baby Diapers", "Baby Wipes", "Diaper Rash Cream"],
+              },
+              {
+                name: "Baby Food",
+                items: [
+                  "Infant Formula",
+                  "Baby Cereal",
+                  "Baby Puree",
+                  "Snacks",
+                ],
+              },
+              {
+                name: "Baby Bath",
+                items: ["Baby Soap", "Baby Shampoo", "Baby Lotion", "Baby Oil"],
+              },
+              {
+                name: "Baby Accessories",
+                items: ["Feeding Bottles", "Pacifiers", "Bibs", "Wet Bags"],
+              },
+            ],
+          },
+          {
+            id: 10,
+            name: "Pet Care",
+            icon: "🐾",
+            count: 43,
+            subcategories: [
+              {
+                name: "Pet Food",
+                items: ["Dog Food", "Cat Food", "Bird Food", "Fish Food"],
+              },
+              {
+                name: "Pet Accessories",
+                items: ["Leash", "Collar", "Pet Bed", "Food Bowl"],
+              },
+              {
+                name: "Pet Grooming",
+                items: ["Pet Shampoo", "Brush", "Nail Clipper", "Ear Cleaner"],
+              },
+              {
+                name: "Pet Treats",
+                items: [
+                  "Dog Treats",
+                  "Cat Treats",
+                  "Chew Sticks",
+                  "Dental Sticks",
+                ],
+              },
+            ],
+          },
+        ],
+        activeCategory: null,
+      };
+
+      // DOM Elements
+      const elements = {
+        locationSelector: document.getElementById("locationSelector"),
+        locationDropdown: document.getElementById("locationDropdown"),
+        locationInput: document.getElementById("locationInput"),
+        locationValue: document.getElementById("locationValue"),
+        profileButton: document.getElementById("profileButton"),
+        profileDropdown: document.getElementById("profileDropdown"),
+        searchInput: document.getElementById("searchInput"),
+        categoriesButton: document.getElementById("categoriesButton"),
+        mobileCategoriesButton: document.getElementById(
+          "mobileCategoriesButton"
+        ),
+        modalOverlay: document.getElementById("modalOverlay"),
+        categoriesModal: document.getElementById("categoriesModal"),
+        modalClose: document.getElementById("modalClose"),
+        categoriesList: document.getElementById("categoriesList"),
+        subcategoriesPanel: document.getElementById("subcategoriesPanel"),
+      };
+
+      // Location functionality
+      class LocationManager {
+        constructor() {
+          this.isDropdownOpen = false;
+          this.bindEvents();
+        }
+
+        bindEvents() {
+          elements.locationSelector.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (!this.isDropdownOpen) {
+              this.openDropdown();
+            }
+          });
+
+          elements.locationSelector.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              if (!this.isDropdownOpen) {
+                this.openDropdown();
+              }
+            }
+          });
+
+          elements.locationInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              this.updateLocation();
+            }
+          });
+
+          elements.locationDropdown.addEventListener("click", (e) => {
+            e.stopPropagation();
+          });
+
+          elements.locationInput.addEventListener("blur", () => {
+            setTimeout(() => {
+              if (!elements.locationDropdown.contains(document.activeElement)) {
+                this.closeDropdown();
+              }
+            }, 150);
+          });
+
+          document.addEventListener("click", (e) => {
+            if (
+              !elements.locationSelector.contains(e.target) &&
+              !elements.locationDropdown.contains(e.target)
+            ) {
+              this.closeDropdown();
+            }
+          });
+        }
+
+        toggleDropdown() {
+          this.isDropdownOpen ? this.closeDropdown() : this.openDropdown();
+        }
+
+        openDropdown() {
+          elements.locationDropdown.classList.add("active");
+          elements.locationInput.focus();
+          this.isDropdownOpen = true;
+        }
+
+        closeDropdown() {
+          elements.locationDropdown.classList.remove("active");
+          this.isDropdownOpen = false;
+        }
+
+        updateLocation() {
+          const value = elements.locationInput.value.trim();
+          if (value) {
+            elements.locationValue.textContent = value;
+            AppState.selectedLocation = value;
+            elements.locationInput.value = "";
+            this.closeDropdown();
+            this.showLocationUpdate(value);
+          }
+        }
+
+        showLocationUpdate(location) {
+          const originalText = elements.locationValue.textContent;
+          elements.locationValue.style.color = "var(--secondary-color)";
+          setTimeout(() => {
+            elements.locationValue.style.color = "";
+          }, 2000);
+        }
+      }
+
+      // Profile dropdown functionality
+      class ProfileManager {
+        constructor() {
+          this.isDropdownOpen = false;
+          this.bindEvents();
+        }
+
+        bindEvents() {
+          elements.profileButton.addEventListener("click", (e) => {
+            e.stopPropagation();
+            this.toggleDropdown();
+          });
+
+          elements.profileButton.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              this.toggleDropdown();
+            }
+          });
+
+          document.addEventListener("click", (e) => {
+            if (
+              !elements.profileButton.contains(e.target) &&
+              !elements.profileDropdown.contains(e.target)
+            ) {
+              this.closeDropdown();
+            }
+          });
+        }
+
+        toggleDropdown() {
+          this.isDropdownOpen ? this.closeDropdown() : this.openDropdown();
+        }
+
+        openDropdown() {
+          elements.profileDropdown.classList.add("active");
+          elements.profileButton.setAttribute("aria-expanded", "true");
+          this.isDropdownOpen = true;
+        }
+
+        closeDropdown() {
+          elements.profileDropdown.classList.remove("active");
+          elements.profileButton.setAttribute("aria-expanded", "false");
+          this.isDropdownOpen = false;
+        }
+      }
+
+      // Search functionality
+      class SearchManager {
+        constructor() {
+          this.bindEvents();
+        }
+
+        bindEvents() {
+          const searchForm = elements.searchInput.closest("form");
+          searchForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            this.handleSearch();
+          });
+        }
+
+        handleSearch() {
+          const query = elements.searchInput.value.trim();
+          if (query) {
+            console.log("Searching for:", query);
+          }
+        }
+      }
+
+      // Categories Modal functionality
+      class CategoriesModal {
+        constructor() {
+          this.isOpen = false;
+          this.bindEvents();
+          this.renderCategories();
+        }
+
+        bindEvents() {
+          // Desktop categories button
+          elements.categoriesButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.openModal();
+          });
+
+          // Mobile categories button
+          elements.mobileCategoriesButton.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.openModal();
+          });
+
+          // Close button
+          elements.modalClose.addEventListener("click", () => {
+            this.closeModal();
+          });
+
+          // Overlay click
+          elements.modalOverlay.addEventListener("click", () => {
+            this.closeModal();
+          });
+
+          // ESC key
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this.isOpen) {
+              this.closeModal();
+            }
+          });
+        }
+
+        openModal() {
+          elements.modalOverlay.classList.add("active");
+          elements.categoriesModal.classList.add("active");
+          document.body.style.overflow = "hidden";
+          this.isOpen = true;
+        }
+
+        closeModal() {
+          elements.modalOverlay.classList.remove("active");
+          elements.categoriesModal.classList.remove("active");
+          document.body.style.overflow = "";
+          this.isOpen = false;
+        }
+
+        renderCategories() {
+          const html = AppState.categories
+            .map(
+              (category) => `
+            <div class="category-item" data-category-id="${category.id}">
+              <div class="category-icon">${category.icon}</div>
+              <div class="category-info">
+                <div class="category-name">${category.name}</div>
+                <div class="category-count">${category.count} products</div>
+              </div>
+            </div>
+          `
+            )
+            .join("");
+
+          elements.categoriesList.innerHTML = html;
+
+          // Add hover events
+          const categoryItems =
+            elements.categoriesList.querySelectorAll(".category-item");
+          categoryItems.forEach((item) => {
+            item.addEventListener("mouseenter", () => {
+              this.showSubcategories(item.dataset.categoryId);
+            });
+
+            item.addEventListener("click", () => {
+              this.showSubcategories(item.dataset.categoryId);
+            });
+          });
+        }
+
+        showSubcategories(categoryId) {
+          // Remove active class from all categories
+          const allCategories =
+            elements.categoriesList.querySelectorAll(".category-item");
+          allCategories.forEach((cat) => cat.classList.remove("active"));
+
+          // Add active class to selected category
+          const activeCategory = elements.categoriesList.querySelector(
+            `[data-category-id="${categoryId}"]`
+          );
+          if (activeCategory) {
+            activeCategory.classList.add("active");
+          }
+
+          const category = AppState.categories.find(
+            (cat) => cat.id == categoryId
+          );
+          if (!category || !category.subcategories) return;
+
+          const html = `
+            <div class="subcategories-grid">
+              ${category.subcategories
+                .map(
+                  (sub) => `
+                <div class="subcategory-card">
+                  <div class="subcategory-name">${sub.name}</div>
+                  <div class="subcategory-items">
+                    ${sub.items
+                      .map(
+                        (item) => `
+                      <span class="subcategory-item">${item}</span>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          `;
+
+          elements.subcategoriesPanel.innerHTML = html;
+
+          // Add click events to subcategory cards
+          const subcategoryCards =
+            elements.subcategoriesPanel.querySelectorAll(".subcategory-card");
+          subcategoryCards.forEach((card) => {
+            card.addEventListener("click", () => {
+              const subcategoryName =
+                card.querySelector(".subcategory-name").textContent;
+              console.log(
+                "Navigating to:",
+                category.name,
+                "->",
+                subcategoryName
+              );
+              // In a real app, navigate to the subcategory page
+            });
+          });
+        }
+      }
+
+      // Cart functionality
+      class CartManager {
+        static updateCartDisplay() {
+          const cartButton = document.querySelector(".cart-button");
+          if (cartButton) {
+            const countElement = cartButton.querySelector(".cart-count");
+            const totalElement = cartButton.querySelector(".cart-total");
+
+            if (countElement) {
+              countElement.textContent = `${AppState.cartCount} ${
+                AppState.cartCount === 1 ? "item" : "items"
+              }`;
+            }
+            if (totalElement) {
+              totalElement.textContent = `₹${AppState.cartTotal}`;
+            }
+          }
+
+          const cartBadge = document.querySelector(".cart-badge");
+          if (cartBadge) {
+            cartBadge.textContent = AppState.cartCount;
+            cartBadge.style.display = AppState.cartCount > 0 ? "flex" : "none";
+          }
+        }
+      }
+
+      // Initialize application
+      document.addEventListener("DOMContentLoaded", () => {
+        try {
+          new LocationManager();
+          new ProfileManager();
+          new SearchManager();
+          new CategoriesModal();
+          CartManager.updateCartDisplay();
+
+          console.log("Vempala application initialized successfully");
+        } catch (error) {
+          console.error("Error initializing application:", error);
+        }
+      });
+
+      // Error handling
+      window.addEventListener("error", (event) => {
+        console.error("Application error:", event.error);
+      });
+
+      // Performance monitoring
+      window.addEventListener("load", () => {
+        const loadTime = performance.now();
+        console.log(`Page loaded in ${Math.round(loadTime)}ms`);
+      });
     </script>
   </body>
 </html>
