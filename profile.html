@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile - ShopHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: #f8fafc;
+      }
+
+      .profile-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        border-radius: 12px 12px 0 0;
+        position: relative;
+      }
+
+      .profile-img-wrapper {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 4px solid white;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: relative;
+        cursor: pointer;
+      }
+
+      .profile-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .edit-icon {
+        position: absolute;
+        margin: 10px;
+        bottom: 0;
+        right: 0;
+        background: #667eea;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        border: 3px solid white;
+        font-size: 14px;
+      }
+
+      @media (max-width: 780px) {
+        .edit-icon {
+          margin: 2px;
+        }
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        color: #fff;
+      }
+
+      .stat-card {
+        text-align: center;
+        padding: 12px 8px;
+      }
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .menu-item:hover {
+        background: #f8fafc;
+      }
+
+      .icon-wrapper {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .btn {
+        padding: 8px 20px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+      }
+
+      .btn-secondary:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      @media (max-width: 768px) {
+        .profile-img-wrapper {
+          width: 80px;
+          height: 80px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen py-4 px-3 md:px-6">
+      <div class="max-w-6xl mx-auto">
+        <!-- Profile View Page -->
+        <div id="profilePage" class="page active">
+          <!-- Header -->
+          <div class="profile-card mb-4">
+            <div class="profile-header">
+              <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="profile-img-wrapper relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
+                    alt="Profile"
+                    class="profile-img"
+                  />
+                </div>
+                <div class="flex-1 text-center md:text-left text-white">
+                  <h1 class="text-2xl font-bold mb-1">John Smith</h1>
+                  <p class="text-sm opacity-90 mb-2">john.smith@email.com</p>
+                  <span class="badge">⭐ Gold Member</span>
+                </div>
+                <div class="flex gap-2">
+                  <button class="btn btn-secondary" onclick="showEditPage()">
+                    Edit Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-4 gap-2 p-4 border-b">
+              <div class="stat-card">
+                <div class="text-2xl font-bold text-purple-600">47</div>
+                <div class="text-xs text-gray-600">Orders</div>
+              </div>
+              <div class="stat-card">
+                <div class="text-2xl font-bold text-purple-600">12</div>
+                <div class="text-xs text-gray-600">Wishlist</div>
+              </div>
+              <div class="stat-card">
+                <div class="text-2xl font-bold text-purple-600">$2.4K</div>
+                <div class="text-xs text-gray-600">Spent</div>
+              </div>
+              <div class="stat-card">
+                <div class="text-2xl font-bold text-purple-600">850</div>
+                <div class="text-xs text-gray-600">Points</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Menu Grid -->
+          <div class="grid md:grid-cols-3 gap-4">
+            <!-- Account -->
+            <div class="profile-card p-4">
+              <h2 class="text-lg font-bold text-gray-800 mb-3">Account</h2>
+              <div class="space-y-1">
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-blue-100 text-blue-600">👤</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Personal Info
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-green-100 text-green-600">📍</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Addresses
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-purple-100 text-purple-600">
+                    💳
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Payments
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-orange-100 text-orange-600">
+                    🔒
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Security
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="profile-card p-4">
+              <h2 class="text-lg font-bold text-gray-800 mb-3">Activity</h2>
+              <div class="space-y-1">
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-red-100 text-red-600">❤️</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Wishlist
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-yellow-100 text-yellow-600">
+                    ⭐
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Reviews
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-indigo-100 text-indigo-600">
+                    🎁
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Rewards
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-lime-100 text-lime-600">🔄</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Track Orders
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Support -->
+            <div class="profile-card p-4">
+              <h2 class="text-lg font-bold text-gray-800 mb-3">Support</h2>
+              <div class="space-y-1">
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-teal-100 text-teal-600">💬</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Help Center
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-cyan-100 text-cyan-600">❓</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      FAQs
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-amber-100 text-amber-600">↩️</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Returns
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+                <div class="menu-item">
+                  <div class="icon-wrapper bg-rose-100 text-rose-600">🚪</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-sm text-gray-800 truncate">
+                      Logout
+                    </div>
+                  </div>
+                  <div class="text-gray-400">›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Profile Page -->
+        <div id="editPage" class="page">
+          <div class="profile-card p-6">
+            <div class="flex items-center justify-between mb-6">
+              <h1 class="text-2xl font-bold text-gray-800">Edit Profile</h1>
+              <button class="btn btn-secondary" onclick="showProfilePage()">
+                ← Back
+              </button>
+            </div>
+
+            <div class="max-w-2xl mx-auto">
+              <!-- Profile Picture Section -->
+              <div class="mb-6 text-center">
+                <div class="profile-img-wrapper mx-auto mb-3 relative">
+                  <img
+                    id="editProfileImg"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
+                    alt="Profile"
+                    class="profile-img"
+                  />
+                  <div
+                    class="edit-icon"
+                    onclick="document.getElementById('fileInput').click()"
+                  >
+                    📷
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept="image/*"
+                  style="display: none"
+                  onchange="previewImage(event)"
+                />
+                <p class="text-sm text-gray-600">
+                  Click to change profile picture
+                </p>
+              </div>
+
+              <!-- Edit Form -->
+              <form class="space-y-4" onsubmit="saveProfile(event)">
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-sm font-semibold text-gray-700 mb-2"
+                      >First Name</label
+                    >
+                    <input
+                      type="text"
+                      id="firstName"
+                      value="John"
+                      class="input-field"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-sm font-semibold text-gray-700 mb-2"
+                      >Last Name</label
+                    >
+                    <input
+                      type="text"
+                      id="lastName"
+                      value="Smith"
+                      class="input-field"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    value="john.smith@email.com"
+                    class="input-field"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="tel"
+                    id="phone"
+                    value="+1 (555) 123-4567"
+                    class="input-field"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"
+                    >Date of Birth</label
+                  >
+                  <input
+                    type="date"
+                    id="dob"
+                    value="1990-05-15"
+                    class="input-field"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"
+                    >Gender</label
+                  >
+                  <select id="gender" class="input-field">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not">Prefer not to say</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2"
+                    >Bio</label
+                  >
+                  <textarea
+                    id="bio"
+                    rows="3"
+                    class="input-field"
+                    placeholder="Tell us about yourself..."
+                  >
+Passionate online shopper and tech enthusiast.</textarea
+                  >
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-sm font-semibold text-gray-700 mb-2"
+                      >City</label
+                    >
+                    <input
+                      type="text"
+                      id="city"
+                      value="New York"
+                      class="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-sm font-semibold text-gray-700 mb-2"
+                      >Country</label
+                    >
+                    <input
+                      type="text"
+                      id="country"
+                      value="United States"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+
+                <div class="pt-4 flex gap-3">
+                  <button type="submit" class="btn btn-primary flex-1">
+                    Save Changes
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="showProfilePage()"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let userData = {
+        firstName: "John",
+        lastName: "Smith",
+        email: "john.smith@email.com",
+        phone: "+1 (555) 123-4567",
+        dob: "1990-05-15",
+        gender: "male",
+        bio: "Passionate online shopper and tech enthusiast.",
+        city: "New York",
+        country: "United States",
+        profileImg:
+          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+      };
+
+      function showEditPage() {
+        document.getElementById("profilePage").classList.remove("active");
+        document.getElementById("editPage").classList.add("active");
+        loadFormData();
+      }
+
+      function showProfilePage() {
+        document.getElementById("editPage").classList.remove("active");
+        document.getElementById("profilePage").classList.add("active");
+      }
+
+      function loadFormData() {
+        document.getElementById("firstName").value = userData.firstName;
+        document.getElementById("lastName").value = userData.lastName;
+        document.getElementById("email").value = userData.email;
+        document.getElementById("phone").value = userData.phone;
+        document.getElementById("dob").value = userData.dob;
+        document.getElementById("gender").value = userData.gender;
+        document.getElementById("bio").value = userData.bio;
+        document.getElementById("city").value = userData.city;
+        document.getElementById("country").value = userData.country;
+        document.getElementById("editProfileImg").src = userData.profileImg;
+      }
+
+      function saveProfile(e) {
+        e.preventDefault();
+
+        userData.firstName = document.getElementById("firstName").value;
+        userData.lastName = document.getElementById("lastName").value;
+        userData.email = document.getElementById("email").value;
+        userData.phone = document.getElementById("phone").value;
+        userData.dob = document.getElementById("dob").value;
+        userData.gender = document.getElementById("gender").value;
+        userData.bio = document.getElementById("bio").value;
+        userData.city = document.getElementById("city").value;
+        userData.country = document.getElementById("country").value;
+
+        updateProfileView();
+        showProfilePage();
+
+        alert("Profile updated successfully!");
+      }
+
+      function updateProfileView() {
+        const profileName = document.querySelector("#profilePage h1");
+        const profileEmail = document.querySelector(
+          "#profilePage .profile-header p"
+        );
+        const profileImgs = document.querySelectorAll(".profile-img");
+
+        profileName.textContent = `${userData.firstName} ${userData.lastName}`;
+        profileEmail.textContent = userData.email;
+        profileImgs.forEach((img) => (img.src = userData.profileImg));
+      }
+
+      function previewImage(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            userData.profileImg = event.target.result;
+            document.getElementById("editProfileImg").src = event.target.result;
+            document.querySelectorAll(".profile-img").forEach((img) => {
+              img.src = event.target.result;
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    </script>
+  </body>
+</html>
