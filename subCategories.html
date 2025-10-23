@@ -770,12 +770,28 @@
         }
 
         .product-grid {
-          grid-template-columns: repeat(1, minmax(0, 1fr));
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .product-image-container {
           height: auto;
           aspect-ratio: 4/3;
+        }
+
+        .product-image-container .slides {
+          width: 100%;
+        }
+
+        .product-image-container .slides > div {
+          width: 100%;
+        }
+
+        .product-image-container .slides > div:not(:first-child) {
+          display: none;
+        }
+
+        .slider-indicators {
+          display: none;
         }
 
         body {
@@ -1881,16 +1897,20 @@
         slideIntervals[index] = interval;
       }
 
+      const isMobile = window.matchMedia("(max-width: 800px)").matches;
+
       document.querySelectorAll(".product-card").forEach((card, index) => {
         const slidesDiv = card.querySelector(".slides");
-        card.addEventListener("mouseenter", () => {
-          if (slideIntervals[index]) clearInterval(slideIntervals[index]);
-          startAutoSlide(slidesDiv, index);
-        });
-        card.addEventListener("mouseleave", () => {
-          if (slideIntervals[index]) clearInterval(slideIntervals[index]);
-          slideIntervals[index] = null;
-        });
+        if (!isMobile) {
+          card.addEventListener("mouseenter", () => {
+            if (slideIntervals[index]) clearInterval(slideIntervals[index]);
+            startAutoSlide(slidesDiv, index);
+          });
+          card.addEventListener("mouseleave", () => {
+            if (slideIntervals[index]) clearInterval(slideIntervals[index]);
+            slideIntervals[index] = null;
+          });
+        }
       });
 
       // Category selection
